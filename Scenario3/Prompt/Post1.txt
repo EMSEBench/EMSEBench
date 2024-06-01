@@ -1,0 +1,25 @@
+Title:azure-cli installation failure #147
+reyang commented on Apr 29, 2017:
+"-Unexpectd error when executing C:\Python27\Scripts\pip.exe install requests : Error processing line 3 of c:\python27\lib\site-packages\azure_cli-2.0.3-py2.7-nspkg.pth:
+	Traceback (most recent call last):
+	    File "c:\python27\lib\site.py", line 152, in addpackage
+	        exec line
+	    File "<string>", line 1 ,in <module>
+	KeyError : 'azure'
+"
+
+
+jdneo commented on Apr 29, 2017:
+"just found that both the azure cli requirements file for py27 and py35 have already contained the requests module:
+
+https://github.com/Microsoft/azureIotdevkitscript/blob/master/tools/0.2.5_python27.txt
+https://github.com/Microsoft/azureIotdevkitscript/blob/master/tools/0.2.5_python35.txt
+
+Maybe we can remove the 'install python requests module' step from the installation script"
+
+helenlivsc assigned Sneezry and unassigned helenlivsc on May 2, 2017
+
+Sneezry commented on May 3, 2017:
+"As I discussed with @helenlivsc , this issue cannot be reproduced on our side, and it seems the error is not caused by our code. Also, @jdneo had updated azurecli install task with requirements, and this update may avoid such issue appearing. So we may leave the task as it was before Build."
+
+reyang closed this as completed on May 4, 2017

@@ -1,0 +1,308 @@
+Title:'Stream' does not name a type #412
+
+xoseperez commented on Jan 5, 2017:
+"Hi
+I'm using the ArduinoJson library for several projects and one of them started failing after latests 5.8.0 release with this error:
+
+In file included from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/StringTraits.hpp:37:0,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/DynamicStringBuilder.hpp:11,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/JsonPrintable.hpp:13,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../JsonVariantBase.hpp:12,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../JsonVariant.hpp:16,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../JsonBuffer.hpp:14,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/JsonParser.hpp:10,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/JsonBufferBase.hpp:10,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson/DynamicJsonBuffer.hpp:10,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson.hpp:10,
+from .piolibdeps/ArduinoJson_ID64/include/ArduinoJson.h:8,
+from .piolibdeps/ArduinoJson_ID64/ArduinoJson.h:8,
+from .piolibdeps/nofuss/src/NoFUSSClient.h:26,
+from .piolibdeps/nofuss/src/NoFUSSClient.cpp:21:
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:19:5: error: 'Stream' does not name a type
+Stream& _stream;
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:22:20: error: expected ')' before '&' token
+Iterator(Stream& stream) : _stream(stream) {}
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp: In member function 'char ArduinoJson::Internals::StdStreamFuncs::Iterator::next()':
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:25:15: error: '_stream' was not declared in this scope
+int n = _stream.read();
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp: At global scope:
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:35:24: error: 'Stream' was not declared in this scope
+Stream, typename TypeTraits::RemoveReference<
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:50: error: template argument 1 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:58: error: template argument 1 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:65: error: template argument 2 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected '::' before ':' token
+: StdStreamFuncs {};
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected identifier before ':' token
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: qualified name does not name a class before ':' token
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected '{' before ':' token
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected unqualified-id before ':' token
+
+So far I have been able to fix it including Stream.h just before the ArduinoJson.h header in my project.
+I have tested it with latest PlatformIO release under Linux, but one of my users has had the same issue under Windows 10 as well (https://bitbucket.org/xoseperez/espurna/issues/26/compile-error-with-nofuss-module-present). The issue is not present with previous ArduinoJson release."
+
+bblanchon commented on Jan 5, 2017:
+"Hi Xose,
+
+ArduinoJson assumes Stream is available as soon as the ARDUINO constant is defined (see ArduinoJson/Configuration.hpp).
+I don't know why Stream is not available in your case.
+
+You can easily disable that feature by adding the following line at the top of your program, before including ArduinoJson.h:
+
+#define ARDUINOJSON_ENABLE_ARDUINO_STREAM 0"
+
+bblanchon commented on Jan 10, 2017:
+"Hi Xose,
+Did the suggested solution work?
+Can I close this issue?"
+
+kaspian-xz commented on Jan 13, 2017:
+"Hi Benoît,
+
+I have same problem with project building (ArduinoJson used by Homie)
+
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:58: error: template argument 1 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:65: error: template argument 2 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected '::' before ':' token
+
+: StdStreamFuncs {};
+^
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected identifier before ':' token
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: qualified name does not name a class before ':' token
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected '{' before ':' token
+.piolibdeps/ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected unqualified-id before ':' token
+Archiving .pioenvs/esp01_1m/lib/libESP8266httpUpdate.a
+Indexing .pioenvs/esp01_1m/lib/libESP8266httpUpdate.a
+Compiling .pioenvs/esp01_1m/lib/Homie_ID555/Homie/Boot/BootConfig.o
+Archiving .pioenvs/esp01_1m/lib/libESP8266HTTPClient.a
+Indexing .pioenvs/esp01_1m/lib/libESP8266HTTPClient.a
+Compiling .pioenvs/esp01_1m/lib/Homie_ID555/Homie/Boot/BootNormal.o
+*** [.pioenvs/esp01_1m/lib/Homie_ID555/Homie/Blinker.o] Error 1
+Unfortunately adding #define ARDUINOJSON_ENABLE_ARDUINO_STREAM 0 as 1st line in the code, before Homie included doesn't help. Had to downgrade to 5.7.3 version of ArduinoJson
+
+Regards,
+Alex."
+
+amayii0 commented on Jan 15, 2017:
+"Hi,
+
+Exact same issue with Homie 1.5 and ArduinoJson 5.8.
+Downgrade to 5.7.3 also solved issue.
+
+Regards"
+
+bblanchon commented on Jan 15, 2017:
+"I don't manage to install Homie on my computer.
+@kaspian-xz and @amayii0, can you please provide a complete build log?"
+
+bblanchon commented on Jan 15, 2017:
+"I cloned the master branch of homie-esp8266 and I managed to compile several examples without any error.
+@marvinroger Do you have a suggestion?"
+
+amayii0 commented on Jan 15, 2017:
+"Verbose mode can be enabled via `-v, --verbose` option
+Collected 27 compatible libraries
+Looking for dependencies...
+Library Dependency Graph
+|-- <Homie> v1.5.0
+
+|   |-- <ArduinoJson> v5.8.0
+|   |-- <PubSubClient> v2.6
+|   |-- <Bounce2> v2.1
+|   |-- <ESP8266WebServer> v1.0
+|   |   |-- <ESP8266WiFi> v1.0
+|   |-- <ESP8266WiFi> v1.0
+|   |-- <Ticker> v1.0
+|   |-- <ESP8266mDNS>
+|   |   |-- <ESP8266WiFi> v1.0
+|   |-- <DNSServer> v1.1.0
+|   |   |-- <ESP8266WiFi> v1.0
+|   |-- <ESP8266httpUpdate> v1.1
+|   |   |-- <ESP8266HTTPClient> v1.1
+|   |   |   |-- <ESP8266WiFi> v1.0
+|   |   |-- <ESP8266WiFi> v1.0
+Compiling .pioenvs\d1_mini\src\main.o
+Archiving .pioenvs\d1_mini\libFrameworkArduinoVariant.a
+Compiling .pioenvs\d1_mini\FrameworkArduino\Esp.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\FS.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\HardwareSerial.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\IPAddress.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\MD5Builder.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\Print.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\Schedule.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\Stream.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\StreamString.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\Tone.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\Updater.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\WMath.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\WString.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\abi.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\base64.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\cbuf.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\cont.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\cont_util.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_eboot_command.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_flash_utils.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_i2s.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_main.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_noniso.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_phy.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_postmortem.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_si2c.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_timer.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_wiring.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_wiring_analog.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_wiring_digital.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_wiring_pulse.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_wiring_pwm.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\core_esp8266_wiring_shift.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\debug.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\heap.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\libb64\cdecode.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\libb64\cencode.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\libc_replacements.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\pgmspace.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\setjmp.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\spiffs\spiffs_cache.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\spiffs\spiffs_check.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\spiffs\spiffs_gc.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\spiffs\spiffs_hydrogen.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\spiffs\spiffs_nucleus.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\spiffs_api.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\spiffs_hal.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\time.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\uart.o
+Compiling .pioenvs\d1_mini\FrameworkArduino\umm_malloc\umm_malloc.o
+Archiving .pioenvs\d1_mini\lib\libArduinoJson_ID64.a
+Compiling .pioenvs\d1_mini\lib\PubSubClient_ID89\PubSubClient.o
+Compiling .pioenvs\d1_mini\lib\Bounce2_ID1106\Bounce2.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\ESP8266WiFi.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\ESP8266WiFiAP.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\ESP8266WiFiGeneric.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\ESP8266WiFiMulti.o
+Archiving .pioenvs\d1_mini\lib\libBounce2_ID1106.a
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\ESP8266WiFiSTA.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\ESP8266WiFiScan.o
+Archiving .pioenvs\d1_mini\libFrameworkArduino.a
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\WiFiClient.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\WiFiClientSecure.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\WiFiServer.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WiFi\WiFiUdp.o
+Archiving .pioenvs\d1_mini\lib\libPubSubClient_ID89.a
+Compiling .pioenvs\d1_mini\lib\ESP8266WebServer\ESP8266WebServer.o
+Compiling .pioenvs\d1_mini\lib\ESP8266WebServer\Parsing.o
+Compiling .pioenvs\d1_mini\lib\Ticker\Ticker.o
+Compiling .pioenvs\d1_mini\lib\ESP8266mDNS\ESP8266mDNS.o
+Archiving .pioenvs\d1_mini\lib\libTicker.a
+Compiling .pioenvs\d1_mini\lib\DNSServer\DNSServer.o
+Compiling .pioenvs\d1_mini\lib\ESP8266HTTPClient\ESP8266HTTPClient.o
+Compiling .pioenvs\d1_mini\lib\ESP8266httpUpdate\ESP8266httpUpdate.o
+Compiling .pioenvs\d1_mini\lib\Homie_ID555\Homie.o
+Archiving .pioenvs\d1_mini\lib\libDNSServer.a
+Archiving .pioenvs\d1_mini\lib\libESP8266WiFi.a
+Compiling .pioenvs\d1_mini\lib\Homie_ID555\HomieNode.o
+Compiling .pioenvs\d1_mini\lib\Homie_ID555\Homie\Blinker.o
+Compiling .pioenvs\d1_mini\lib\Homie_ID555\Homie\Boot\Boot.o
+Archiving .pioenvs\d1_mini\lib\libESP8266WebServer.a
+Archiving .pioenvs\d1_mini\lib\libESP8266httpUpdate.a
+In file included from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/StringTraits.hpp:37:0,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/DynamicStringBuilder.hpp:11,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/JsonPrintable.hpp:13,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../JsonVariantBase.hpp:12,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../JsonVariant.hpp:16,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../JsonBuffer.hpp:14,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/JsonParser.hpp:10,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/JsonBufferBase.hpp:10,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson/DynamicJsonBuffer.hpp:10,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson.hpp:10,
+from .piolibdeps\ArduinoJson_ID64/include/ArduinoJson.h:8,
+from .piolibdeps\ArduinoJson_ID64/ArduinoJson.h:8,
+from .piolibdeps\Homie_ID555\src\Homie\Datatypes/../Limits.hpp:3,
+from .piolibdeps\Homie_ID555\src\Homie\Datatypes/Interface.hpp:3,
+from .piolibdeps\Homie_ID555\src\Homie\Blinker.hpp:4,
+from .piolibdeps\Homie_ID555\src\Homie\Blinker.cpp:1:
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:19:5: error: 'Stream' does not name a type
+Stream& _stream;
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:22:20: error: expected ')' before '&' token
+Iterator(Stream& stream) : _stream(stream) {}
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp: In member function 'char ArduinoJson::Internals::StdStreamFuncs::Iterator::next()':
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:25:15: error: '_stream' was not declared in this scope
+int n = _stream.read();
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp: At global scope:
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:35:24: error: 'Stream' was not declared in this scope
+Stream, typename TypeTraits::RemoveReference<
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:50: error: template argument 1 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:58: error: template argument 1 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:36:65: error: template argument 2 is invalid
+TStream>::type>::value>::type>
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected '::' before ':' token
+: StdStreamFuncs {};
+^
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected identifier before ':' token
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: qualified name does not name a class before ':' token
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected '{' before ':' token
+.piolibdeps\ArduinoJson_ID64/include/ArduinoJson/Deserialization/../Serialization/../StringTraits/ArduinoStream.hpp:37:5: error: expected unqualified-id before ':' token
+Compiling .pioenvs\d1_mini\lib\Homie_ID555\Homie\Boot\BootConfig.o
+Compiling .pioenvs\d1_mini\lib\Homie_ID555\Homie\Boot\BootNormal.o
+Archiving .pioenvs\d1_mini\lib\libESP8266HTTPClient.a
+Archiving .pioenvs\d1_mini\lib\libESP8266mDNS.a
+*** [.pioenvs\d1_mini\lib\Homie_ID555\Homie\Blinker.o] Error 1
+ [ERROR] Took 4.79 seconds"
+
+amayii0 commented on Jan 15, 2017:
+"Board : Wemos D1 Mini
+IDE : PlatformIO Atom 1.9.9
+Host OS : W7 x64
+Python 2.7.13"
+
+bblanchon commented on Jan 15, 2017:
+"Thank you very much @amayii0, you made me realize that the issue is not related to Homie, but to PlatformIO.
+The solution is given in the link of the first post of this thread, I just need to add an #include <Stream.h>."
+
+bblanchon added a commit that referenced this issue on Jan 15, 2017
+@bblanchon
+Fixed error 'Stream' does not name a type (issue #412)
+7a1c1fe
+bblanchon added a commit that referenced this issue on Jan 16, 2017
+@bblanchon
+Fixed error "Stream does not name a type" (issue #412)
+567157b
+
+bblanchon commented on Jan 16, 2017:
+"Fixed in v5.8.1"
+bblanchon closed this as completed on Jan 16, 2017
+bblanchon added the bug label on Jan 16, 2017
+
+sharonAoko commented on Jan 16, 2017:"Thanks bblanchon, by adding '#define ARDUINOJSON_ENABLE_ARDUINO_STREAM 0' it has solved my issue"
+
+amayii0 mentioned this issue on Feb 8, 2017
+1.5.0 Will not build with ArduinoJson 5.8.0 homieiot/homie-esp8266#278
+
+Repository owner locked and limited conversation to collaborators on Sep 21, 2018
+
+bblanchon added the v5 label on Feb 6
+

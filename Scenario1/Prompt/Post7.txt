@@ -1,0 +1,120 @@
+Title:Unable to execute Keras model in swift
+
+jostheim commented on Jan 31, 2019:
+I have a keras model that looks like:
+
+model = Sequential()
+model.add(Dense(60, input_shape=(features_train.shape[1], features_train.shape[2]), kernel_initializer='normal', activation='relu'))
+model.add(Conv1D(256, 2, padding='causal'), )
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
+model.add(Conv1D(256, 2, padding='causal'))
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
+model.add(Conv1D(256, 2, padding='causal'))
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
+model.add(MaxPooling1D(2))
+model.add(Conv1D(256, 2, padding='causal'))
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
+model.add(Conv1D(256, 2, padding='causal'))
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
+model.add(MaxPooling1D(2))
+model.add(Flatten())
+model.add(Dense(targets.shape[1], activation='softmax' if classify else 'linear'))
+Final input shape is (400, 3), output shape is (12).
+
+I successfully export it using coremltools:
+
+0 : dense_20_input, <keras.engine.topology.InputLayer object at 0x7f0943dbbd68>
+1 : dense_20, <keras.layers.core.Dense object at 0x7f0943dbbf60>
+2 : dense_20__activation__, <keras.layers.core.Activation object at 0x7f098ec8f358>
+3 : dense_20_permute_conv1d_51, <keras.layers.core.Permute object at 0x7f098ec8f5c0>
+4 : conv1d_51, <keras.layers.convolutional.Conv1D object at 0x7f0943dbbe48>
+5 : activation_98, <keras.layers.core.Activation object at 0x7f0943dbbb38>
+6 : conv1d_52, <keras.layers.convolutional.Conv1D object at 0x7f094733b400>
+7 : activation_99, <keras.layers.core.Activation object at 0x7f0943dbb940>
+8 : conv1d_53, <keras.layers.convolutional.Conv1D object at 0x7f09473a68d0>
+9 : activation_100, <keras.layers.core.Activation object at 0x7f094733b2e8>
+10 : max_pooling1d_21, <keras.layers.pooling.MaxPooling1D object at 0x7f09469dcba8>
+11 : conv1d_54, <keras.layers.convolutional.Conv1D object at 0x7f0946986198>
+12 : activation_101, <keras.layers.core.Activation object at 0x7f09468e3780>
+13 : conv1d_55, <keras.layers.convolutional.Conv1D object at 0x7f094815d780>
+14 : activation_102, <keras.layers.core.Activation object at 0x7f0947347278>
+15 : max_pooling1d_22, <keras.layers.pooling.MaxPooling1D object at 0x7f0947cafe80>
+16 : max_pooling1d_22_permute_flatten_24, <keras.layers.core.Permute object at 0x7f098ec8f4e0>
+17 : flatten_24, <keras.layers.core.Flatten object at 0x7f0947cc4a90>
+18 : dense_21, <keras.layers.core.Dense object at 0x7f094815f320>
+19 : dense_21__activation__, <keras.layers.core.Activation object at 0x7f098ec8ff60>
+I have written the following to execute it in swift:
+
+//
+//  VibrationModelWrapper.swift
+//  studfinder
+//
+//  Created by Ostheimer, James on 1/30/19.
+//  Copyright © 2019 Factorialwise. All rights reserved.
+//
+
+import Foundation
+import CoreML
+
+class VibrationModelWrapper {
+    
+    let model = vibration_model()
+    internal let vibrationSize = 400
+    internal let seriesSize = 3
+    internal let targetBins = [0.0, -0.4375, -1.4375, -2.4375, -3.4375, -4.4375, -5.4375,  5.0, 4.0, 3.0, 2.0, 1.0, 0.75, 0.0]
+    
+    func predictDistance(vibration: [RawData]) -> Double {
+        do {
+            var features = try? MLMultiArray(shape:[NSNumber(integerLiteral: vibrationSize), 1, NSNumber(integerLiteral: seriesSize)], dataType: MLMultiArrayDataType.float32)
+            var sumX = 0.0
+            var sumY = 0.0
+            var sumZ = 0.0
+            for rawData in vibration {
+                    sumX += rawData.x
+                    sumY += rawData.y
+                    sumZ += rawData.z
+            }
+            for seq in 0..<vibrationSize {
+                let dSeq = Double(seq)
+                for chan in 0..<seriesSize {
+                    let dChan = Double(chan)
+                    features![[NSNumber(floatLiteral: dSeq), NSNumber(floatLiteral: 0), NSNumber(floatLiteral: dChan)]] = NSNumber(floatLiteral: 0.0)
+
+                }
+            }
+            let vibrationModelInput = vibration_modelInput(vibration: features!)
+            let vibration_modelOutput = try model.prediction(input: vibrationModelInput)
+            var summer = 0.0
+            for (index, bin) in targetBins.enumerated() {
+                summer += vibration_modelOutput.distance[index].doubleValue * bin
+            }
+            return summer
+        } catch let error {
+            print(error)
+        }
+        return -1.0
+    }
+}
+Right now I am trying to feed it all 0's to see if I can get it to work. According to the documentation the shape of the features that the model wants is (seq, batch, channels), but I have also tried (batch, seq, channels), I get the same error either way:
+
+2019-01-30 22:13:09.352618-0800 studfinder[25525:6647655] [espresso] [Espresso::handle_ex_plan] exception=Texture array length too high for dimensions: 1x1x6000
+2019-01-30 22:13:09.354696-0800 studfinder[25525:6647655] [coreml] Failure dynamically resizing for sequence length.
+2019-01-30 22:13:09.354803-0800 studfinder[25525:6647655] [coreml] Failure in resetSizes.
+Error Domain=com.apple.CoreML Code=0 "Failure dynamically resizing for sequence length." UserInfo={NSLocalizedDescription=Failure dynamically resizing for sequence length.}
+I don't understand the error message, I don't know what array I have that is 1x1x6000 or why that is too big, or even what is not too big. Does anyone have any advice?
+
+jostheim commented on Jan 31, 2019:
+To save someone else the time I just wasted on this... this error message means that Apple could not run it on the GPU on your hardware, so you need to try it on the cpu.
+
+Change my code above as such, and it runs.
+
+            var opts = MLPredictionOptions()
+            opts.usesCPUOnly = true
+            let vibration_modelOutput = try model.prediction(input: vibrationModelInput, options: opts)
+
+jostheim closed this as completed on Jan 31, 2019

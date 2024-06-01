@@ -1,0 +1,18 @@
+Title:Zone Add/Edit Sensor Child ID Fix #111
+twa127 commented on Jan 31, 2020:
+"sensor_child_id should be either 0 or 1
+dropdown list for Temperature Sensor Child ID is made to show possible options dependent on the Temperature Sensor ID selected."
+
+twa127 added 2 commits 4 years ago
+Merge pull request #26 from pihome-shc/master 
+398959a
+Merge
+Update zone_add.php
+pihome-shc added the bug label on Jan 31, 2020
+pihome-shc merged commit 72ef9e0 into pihome-shc:master on Jan 31, 2020
+pihome-shc commented on Jan 31, 2020:"#70"
+
+pihome-shc pushed a commit that referenced this pull request on Jun 21, 2020
+Merge pull request #111 from pihome-shc/master …
+79bc31d
+Merge pull request #280 from twa127/master

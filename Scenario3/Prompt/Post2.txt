@@ -1,0 +1,15 @@
+Title:[BI] Could not find ARM Deployment Failed telemetry #431
+ghost commented on Jul 13, 2017:
+"In Shake-Shake example I need to run "cloud-provision" task. When I failed to finish ARM deploy in the task, I could not find corresponding telemetry."
+
+dooriya assigned Sneezry on Jul 20, 2017
+dooriya added this to the Sprint 121 milestone on Jul 20, 2017
+
+dooriya commented on Jul 20, 2017:
+"due to the async issue, need to be fixed"
+
+ArthurMa1978 added Bug BI labels on Jul 21, 2017
+
+ArthurMa1978 commented on Aug 2, 2017:
+"fixed in 1.0.2"
+ArthurMa1978 closed this as completed on Aug 2, 2017

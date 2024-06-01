@@ -1,0 +1,3 @@
+为了使得样本覆盖五个种类，我们的随机数生成器最后生成了25个数据。
+
+To ensure that the samples cover five categories, our random number generator ultimately produced 25 data entries.

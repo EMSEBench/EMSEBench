@@ -1,0 +1,195 @@
+Title:ESP32: Unauthorized Access (401) to Blob Storage #814
+jubueche commented on Jan 17, 2019:
+"OS and version used: Ubuntu 18.04
+
+SDK version used: Release Dec. 13, 2018
+
+Target: ESP32.
+
+Description of the issue:
+I am trying to connect the ESP32 to my Blob storage. I am getting an HTTP error 401 (unauthorized access).
+I am using the example: iothub_client_sample_upload_to_blob_mb.
+I tried connecting using just the Shared Access Key in my connection string, but this did not work (no connection). After that I generated an SAS token in Azure (Storage Accounts -> -> Shared Access Signature) and plugged that in into my connection string.
+My connection string looks like this:
+static const char* connectionString = "HostName=<Host name>;DeviceId=<Device ID>;SharedAccessSignature=<inserted here without the "?" at the beginning>"; 
+Q1: Why is there a "?" in front of the token? When I look at the connection string, at SharedAccessSignature=.. I don't see the "?".
+
+I also set up the Endpoint in Azure under IoT Hub -> Upload files.
+In the example, I am using the option SET_TRUSTED_CERT_IN_SAMPLES.
+
+Q2: What does that mean? I am not so familiar with basic encryption and should probably read up on that.
+
+Q3: Why am I getting an 401 error? What could be a possible solution?
+
+Code sample exhibiting the issue:
+Console log of the issue:
+Initializing SNTP
+ESP platform sntp inited!
+Time is not set yet. Connecting to WiFi and getting time over NTP. timeinfo.tm_year:70
+Waiting for system time to be set... tm_year:0[times:1]
+Starting the IoTHub client sample upload to blob with multiple blocks...
+
+Info: Waiting for TLS connection
+Info: Waiting for TLS connection
+Info: Waiting for TLS connection
+Info: Waiting for TLS connection
+
+Error: Time:Thu Jan 17 22:06:00 2019 File:/home/julian/eclipse-workspace/chaze-esp32/components/esp-azure/azure-iot-sdk-c/iothub_client/src/iothub_client_ll_uploadtoblob.c Func:send_http_request Line:142 HTTP code was 401
+
+Error: Time:Thu Jan 17 22:06:00 2019 File:/home/julian/eclipse-workspace/chaze-esp32/components/esp-azure/azure-iot-sdk-c/iothub_client/src/iothub_client_ll_uploadtoblob.c Func:IoTHubClient_LL_UploadToBlob_step1and2 Line:494 unable to HTTPAPIEX_ExecuteRequest
+
+Error: Time:Thu Jan 17 22:06:00 2019 File:/home/julian/eclipse-workspace/chaze-esp32/components/esp-azure/azure-iot-sdk-c/iothub_client/src/iothub_client_ll_uploadtoblob.c Func:IoTHubClient_LL_UploadMultipleBlocksToBlob_Impl Line:768 error in IoTHubClient_LL_UploadToBlob_step1
+Received unexpected result FILE_UPLOAD_ERROR
+
+hello world failed to upload
+Press any key to continue"
+
+jubueche commented on Jan 18, 2019:
+"I changed to using just the Shared Access key with the option SET_TRUSTED_CERT_IN_SAMPLES and the upload worked one time, then my esp paniced and when I retry I get a 403 error. Why could that be? This is essentially this issue."
+
+massand assigned jspaith on Jan 19, 2019
+massand added the investigation-required label on Jan 19, 2019
+
+asergaz commented on Jan 24, 2019:
+"@jubueche I have answered your question on Stack Overflow: https://stackoverflow.com/questions/54245181/azure-iot-sdk-c-error-401-when-connecting-to-blob-storage/"
+
+asergaz self-assigned this on Jan 24, 2019
+
+jubueche commented on Jan 25, 2019:
+"In your answer you pointed me to an Arduino example that sends messages. This works fine for me. I ham trouble with the example sketch for uploading block blob data.
+
+Here is the trace of the first exception that I get:
+
+ _svfprintf_r at /Users/ivan/e/newlib_xtensa-2.2.0-bin/newlib_xtensa-2.2.0/xtensa-esp32-elf/newlib/libc/stdio/../../../.././newlib/libc/stdio/vfprintf.c:1529
+
+0x4015ee16: _vsnprintf_r at /Users/ivan/e/newlib_xtensa-2.2.0-bin/newlib_xtensa-2.2.0/xtensa-esp32-elf/newlib/libc/stdio/../../../.././newlib/libc/stdio/vsnprintf.c:72
+
+0x4015ee52: vsnprintf at /Users/ivan/e/newlib_xtensa-2.2.0-bin/newlib_xtensa-2.2.0/xtensa-esp32-elf/newlib/libc/stdio/../../../.././newlib/libc/stdio/vsnprintf.c:41
+
+0x400f4136: STRING_construct_sprintf at /home/julian/eclipse-workspace/chaze-esp32/components/esp-azure/azure-iot-sdk-c/c-utility/src/strings.c:786
+
+0x400ecbf0: IoTHubClient_LL_UploadMultipleBlocksToBlob_Impl at /home/julian/eclipse-workspace/chaze-esp32/components/esp-azure/azure-iot-sdk-c/iothub_client/src/iothub_client_ll_uploadtoblob.c:911
+
+0x400ebcbd: IoTHubClientCore_LL_UploadMultipleBlocksToBlobEx at /home/julian/eclipse-workspace/chaze-esp32/components/esp-azure/azure-iot-sdk-c/iothub_client/src/iothub_client_core_ll.c:2595
+
+0x400ea6a6: IoTHubDeviceClient_LL_UploadMultipleBlocksToBlob at /home/julian/eclipse-workspace/chaze-esp32/components/esp-azure/azure-iot-sdk-c/iothub_client/src/iothub_device_client_ll.c:127
+
+0x40091336: upload_to_blob_block at /home/julian/eclipse-workspace/chaze-esp32/components/upload_to_blob_block/upload_to_blob_block.c:120
+
+0x400d39ae: azure_task at /home/julian/eclipse-workspace/chaze-esp32/main/main.c:87
+
+0x4008e585: vPortTaskWrapper at /home/julian/Documents/esp/esp-idf/components/freertos/port.c:403
+So I guess it is something with vfprintf."
+
+jubueche commented on Jan 25, 2019:
+"When I first upload, it works, but afterwards I get an error (403). I am pretty sure I setup everything correctly in Azure. On question though: When configuring the blob format, it says: {iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm} With partition, what is meant? Some table I created? And must the files names be equivalent to this?
+I used: "chaze-iot-hub/0/2019/01/24/21/53-01.txt"
+
+This is the line where it fails when the first upload was not successful:
+
+
+if (send_http_sas_request(upload_data, STRING_c_str(uri_resource), iotHubHttpApiExHandle, STRING_c_str(relativePath), requestHttpHeaders, blobBuffer, responseContent) != 0)
+                                        {
+                                            /*Codes_SRS_IOTHUBCLIENT_LL_02_076: [ If HTTPAPIEX_ExecuteRequest call fails then IoTHubClient_LL_UploadMultipleBlocksToBlob(Ex) shall fail and return IOTHUB_CLIENT_ERROR. ]*/
+                                            result = __FAILURE__;
+                                            LogError("unable to HTTPAPIEX_ExecuteRequest");
+                                        }"
+
+asergaz commented on Jan 25, 2019:
+"If you use the sample as is you don't need to care about with the blob format. You should just point to where the file is:
+
+Line 133"
+
+jubueche commented on Jan 26, 2019:
+"I see. But that is not the problem. The problem is:
+
+First time uploading generates an exception in vprintf. I think this is board related.
+After an unsuccessful upload, I get an error (403) when trying to upload again. And I believe that should not happen. The 1st error should appear over and over again. Would it help if I post my source code?
+Is anybody else having the same issue with ESP32 and azure? And @sergaz-msft maybe you have an ESP and can try to reproduce the error. I greatly appreciate any help."
+
+YoDaMa added the area-documentation label on Jan 30, 2019
+
+jubueche commented on Feb 2, 2019:
+"Quick update: Seems now that I am getting the first error over and over again. I deleted the #ifdefs for the certificate and just used the MSFT Baltimore certificate. Seems that this was the issue.
+I am still getting an error when the uplaod is done. After setting the data pointer to NULL and the size also to 0, the program panics. Maybe this has something to do with the esp?
+
+Also I am using the release of 13th Decdember.
+Update: The error just occured again. I am trying to debug but for some reason my debugger keeps failing at random lines."
+
+jubueche commented on Feb 4, 2019:
+"There is a new update: espressif/esp-azure#23
+After the last block upload, the callback sets the size of the data to zero and this Buffer_new() in iothub_client_ll_uploadtoblob.c Line and thus generates a panic. I am trying to fix this, but I am getting the good old 403 right now. Have to wait a couple minutes. (I think this is an issue with a time zone and the expiry time)
+Q: What should be the IoTHubResponse in case the last block was uploaded?
+Is what I stated above correct?
+Why does it (seem to) work for others?"
+
+jubueche commented on Feb 4, 2019:
+"Ok that fixed the problem. It is just a minor change. I added:
+
+unsigned char * tmp = BUFFER_u_char(responseToIoTHub);
+                                        	STRING_HANDLE req_string;
+                                        	if(tmp == NULL){
+                                        		req_string = STRING_construct_sprintf("{\"isSuccess\":%s, \"statusCode\":%d}", ((httpResponse < 300) ? "true" : "false"), httpResponse);
+                                        	} else{
+                                        		req_string = STRING_construct_sprintf("{\"isSuccess\":%s, \"statusCode\":%d, \"statusDescription\":\"%s\"}", ((httpResponse < 300) ? "true" : "false"), httpResponse, tmp);
+                                        	}"
+
+jubueche closed this as completed on Feb 4, 2019
+az-iot-builder-01 commented on Feb 4, 2019:
+"@jubueche, thank you for your contribution to our open-sourced project! Please help us improve by filling out this 2-minute customer satisfaction survey"
+
+jubueche mentioned this issue on Feb 4, 2019
+Upload to blob storage is not working espressif/esp-azure#23
+
+massand commented on Feb 5, 2019:
+"@jubueche - thanks for sharing your resolution. It seems you had to patch the iothub_client\src\iothub_client_ll_uploadtoblob.c file with the NULL check above. It would be awesome if you could submit PR for this into the iothub_ll_uploadtoblob.c code, so you are credited for this change :) . Our current tests running on Ubuntu VM didn't catch this. Espressif libraries have a panic behavior for the vsnprintf call when the %s parameter is null, and I believe most embedded C libraries will run into this."
+
+jubueche mentioned this issue on Feb 5, 2019
+Fixed issue #814 #847
+
+massand added bug and removed investigation-required labels on Feb 8, 2019
+
+bikamani pushed a commit that referenced this issue on Mar 22, 2019
+bring in Fixed issue #814 #847 change
+
+bikamani added a commit that referenced this issue on Mar 30, 2019
+@bikamani
+Merge PR 847 - (issue #814) Fix uploadtoblob null pointer IoTHubRespo… …
+7d7dfe1
+…nse (#918)
+
+Bring in PR #847 (issue #814) change to fix uploadtoblob null pointer IoTHubResponse, add unit tests.
+
+jadeiceman pushed a commit to jadeiceman/azure-iot-sdk-c that referenced this issue on Apr 13, 2019
+@bikamani
+@jadeiceman
+Merge PR 847 - (issue Azure#814) Fix uploadtoblob null pointer IoTHub… …
+61a4785
+…Response (Azure#918)
+
+Bring in PR Azure#847 (issue Azure#814) change to fix uploadtoblob null pointer IoTHubResponse, add unit tests.
+jebrando added a commit that referenced this issue on Apr 17, 2019
+@jebrando
+Merge sec client (#954) …
+0ee625c
+* Updating WolfSSL image to return errors that happen in the script (#896)
+
+* Fix that mqtt connects twice on x509 cert (#920)
+
+* Rename macro_utils DEC to CS_DEC (fix Arduino name collision) (#876)
+
+* Merge PR 847 - (issue #814) Fix uploadtoblob null pointer IoTHubResponse (#918)
+
+Bring in PR #847 (issue #814) change to fix uploadtoblob null pointer IoTHubResponse, add unit tests.
+
+* Add authentication details to connection reliability doc
+
+* Add authentication details to connection reliability doc [ACR]
+
+* refactor (#925)
+
+* release_2019_04_11_after_bump_version
+
+jebrando added a commit that referenced this issue on May 30, 2019
+@jebrando
+Merge pull request #1031 from Azure/sec_client_merge

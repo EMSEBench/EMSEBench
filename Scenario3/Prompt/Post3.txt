@@ -1,0 +1,15 @@
+Title:arduino extension cannot be upgrade when running 1.1 installation script #536
+
+shizn commented on Aug 31, 2017:
+"Arduino 0.2.4: Arduino for Visual Studio Code(vsciot-vscode) Update to 0.2.5
+ Windows10"
+
+ArthurMa1978 added this to the Sprint 123 milestone on Aug 31, 2017
+ArthurMa1978 added Bug bash - 1.1.0 Bug Installation labels on Aug 31, 2017
+ArthurMa1978 assigned Sneezry on Aug 31, 2017
+
+ArthurMa1978 commented on Aug 31, 2017:
+"Fixed, https://mseng.visualstudio.com/VSIoT/IoT%20Dev%20Kit/_git/IoTDevKitInstallation.Win/pullrequest/253551"
+
+ArthurMa1978 closed this as completed on Aug 31, 2017
+ArthurMa1978 added the P1 label on Sep 5, 2017

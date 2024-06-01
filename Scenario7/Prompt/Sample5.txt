@@ -1,0 +1,5 @@
+Title:Performance issue on the firefox at low laptop of ThinkPad X201.
+
+Body:There is no landmark trace on the face when testing "Webcam Face Landmark Detection" on the laptop of ThinkPad X201 as well as "Video Face Tracking" and the video play is very slow.So my question is that any performance description for the project? or any hardware requirement able support face-api.js run well?Thanks & Best RegardsSui  
+
+Comment:['First of all; I would check whether tfjs is running correctly on your ThinkPad; e.g. whether the WebGL backend is registered correctly. Try to run some of the tfjs demos on your Pad first.=====']

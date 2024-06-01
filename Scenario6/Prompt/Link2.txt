@@ -1,0 +1,65 @@
+Title:Improve JavaDoc of RunnerBuilder; Update reference to Google's code style #1306
+
+PeterWippermann commented on May 24, 2016:
+"Clarified the JavaDoc in RunnerBuilder that I found a bit confusing while debugging the code.
+In the course of that change I also found that the URL to Google's code style was out-of-date."
+
+peter.wippermann added 3 commits 8 years ago
+Applied Google code formatting style
+Updated URL to Google's code style repository
+JavaDoc now reflects that null can be returned as well
+
+kcooney commented on May 24, 2016:
+"While we do follow Google Java style, we use a four space indent, not a two space indent"
+
+kcooney reviewed on May 24, 2016:
+"src/main/java/org/junit/runners/model/RunnerBuilder.java
+            return new ErrorReportingRunner(testClass, e);
+        }
+  /**
+   * Always returns a runner or null.
+kcooney on May 24, 2016:
+'In practice, I believe callers that call this won't see a null return value'
+PeterWippermann on May 25, 2016:
+'@kcooney
+While debugging the code I saw null values.
+This explains the null check in AllDefaultPossibilitiesBuilder'"
+
+peter.wippermann added 2 commits 8 years ago
+Changed formatting from 2 space indentation to 4 spaces
+
+Updating code style as per#1306 (comment)
+
+PeterWippermann commented on May 25, 2016:
+"I adapted my code formatting and also put a remark in the "coding style" policy file"
+
+kcooney commented on May 25, 2016:
+"It's a bit hard to see what you are changing with the entire file being reformatted at the same time. Please configure your IDE not to reformat lines that you didn't change.
+
+In any case, it looks like the change is to document that safeRunnerForClass() can return null. While we do have internal implementations of RunnerBuilder that return null, no RunnerBuilder passed to a Runner constructor will return null (this is done by an undocumented collaboration between AllDefaultPossibilitiesBuilder and JUnit4Builder).
+
+Yes, this is pretty ugly, and I wished the internal builders used a different (private) interface, but if we document that this can return null then the callers will wonder "what do I do if I get a null" until they eventually realize it can't happen."
+
+PeterWippermann commented on May 25, 2016:
+"@kcooney Well, what if we add your statement to the JavaDoc then?
+"no RunnerBuilder passed to a Runner constructor will return null""
+
+kcooney commented on May 25, 2016:
+"@PeterWippermann Perhaps:
+
+Note that some of the internal JUnit implementations of
+RunnerBuilder will return {@code null} from this method, but
+no RunnerBuilder passed to a Runner constructor will
+return {@code null} from this method.
+(Yuck. What a confusing API)"
+
+PeterWippermann commented on May 29, 2016:
+"@kcooney What do you think, ready for merging? ;-)"
+
+kcooney pushed a commit that referenced this pull request on May 30, 2016@kcooney
+Updated URL to Google's code style repository.
+kcooney closed this in 316e5b6 on May 30, 2016
+
+kcooney commented on May 30, 2016:
+"Merged. Thanks!"
+ PeterWippermann deleted the improve_javadoc branch 8 years ago

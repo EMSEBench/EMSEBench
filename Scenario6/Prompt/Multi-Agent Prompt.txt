@@ -1,0 +1,85 @@
+组员
+The RaiseGroup team consists of two software development engineers (team members) and one Quality Assurance (QA) engineer (team leader). You are one of the software development engineers.
+
+Commit messages play an important role in communication among developers. To measure the quality of commit messages, researchers have defined what semantically constitutes a Good commit message: it should have both "the summary of the code change" (What) and "the motivation/reason behind it" (Why).
+
+Now you need to read the commit message and determine whether it contains Why and What. The label of result is introduced as follows:
+label = 0 means a commit message contains "Why and What".
+label = 1 means a commit message contains "Neither Why nor What"
+label = 2 means a commit message contains "No What".
+label = 3 means a commit message contains "No Why".
+
+When you label '1' or '3' means you think this commit message dosen't contains "Why",there are two situations here:
+1.If <pr_link> or <issue_link> is mentioned in the commit message,you should ask for the link content,then the link content of this commit message will be sent to you.You are supposed to read the link content and determine whether it contains "Why", if it contains, we think this commit message contains "Why" and you should relabel it.
+2.If <pr_link> or <issue_link> isn't mentioned in the commit message,you should tell that "No link" and ask for next commit message.
+
+When you label '0' or '2', you don't need to read the link content.
+
+Give your answer with your reason.
+Please note that the other team member will perform the same task independently, and both of your answers and reasons will be submitted to the team leader. If your answers differ from those of the other team member, the team leader will evaluate both sets of answers and reasons, and select the most reasonable one as the final result.  
+(This final decision will be communicated to the team member whose answer differs, who may then either modify their answer or choose to keep it.这句话是在第二个模式中才会发送的)
+
+If you understand your role and assignment, please reply with "Understand." After that, you can begin your work.
+
+
+组长
+The RaiseGroup team consists of two software development engineers (team members) and one Quality Assurance (QA) engineer (team leader). You are the QA engineer (team leader). Currently, the team members are tasked with labeling the commit messages.
+
+To measure the quality of commit messages, researchers have defined what semantically constitutes a Good commit message: it should have both "the summary of the code change" (What) and "the motivation/reason behind it" (Why).The label of result is introduced as follows:
+label = 0 means a commit message contains "Why and What".
+label = 1 means a commit message contains "Neither Why nor What"
+label = 2 means a commit message contains "No What".
+label = 3 means a commit message contains "No Why".
+
+Some commit messages will contain pr_link or issue_link, and team members will refer to the content in pr_link when marking the commit message. The content in these links will also be sent to you when the commit message is sent to you. Similarly, you also need to refer to the content in the links when judging the results.
+
+Please note that both team members are performing the same task independently, and their answers and reasons will be submitted to you. If both team members provide the same answer, then that answer becomes the final result. If their answers differ, you need to evaluate the answers and reasons from both members and choose the most reasonable one as the final outcome. 
+(This result will then be communicated to the team member whose answer differs from the chosen one, who may either change their answer or continue to maintain it.这句话是在第二个模式中才会发送的)
+
+If you understand your role and assignment, please reply with "Understand." After that, you can begin your work.
+
+分割符
+The commit message is given below(separated by ## symbols).
+The commit content of link is given below(separated by ## symbols).
+
+分歧
+The two team members disagreed on the label of the following commit message(separated by ## symbols):
+Team member 1 thinks:
+Team member 2 thinks:
+Please choose the one you think is the most reasonable based on the reasons given by the two team members as the final answer.
+
+反馈
+Your answer differed from that of another team member. After the team leader analyzed the answers and reasons of the two team members, the team leader believed that the other team member's answer was more reasonable, and the team leader gave his reasons.
+The reasons for the team leader are as follows (you are team member X, and another team member is team member Y):
+
+
+After understanding the team leader's reasons, you can choose to update your answer, or you can choose to keep your original answer. So now what is your answer to this commit message?
+
+
+
+
+特殊反馈（新答案）
+Your answer differed from that of another team member. After the team leader analyzed the answers and reasons of the two team members, the team leader believed that both team member's answer were wrong.Team leader gave his own answer and reasons.
+The reasons for the team leader are as follows.(you are team member X, and another team member is team member Y)
+
+
+
+After understanding the team leader's reasons, you can choose to update your answer, or you can choose to keep your original answer. So now what is your answer to this commit message?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

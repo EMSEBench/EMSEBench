@@ -1,0 +1,108 @@
+Title:Negative temperatures #13
+blinkingbee commented on Jun 9, 2017:
+"Problem with temperatures below zero being logged as large positive numbers (e.g. 4085.3 °C). This is also reflected in the graphs auto-scaling to 4000 °C.
+
+When I read the sensor temperature using a python script with an expression such as echo /usr/local/bin/get_temp.py | head -1 | awk -F. '{print $1"."int(($2/100)+0.5)}'`` this returns the correct negative temperature.
+
+Could this be a problem with how Temperature-Machine reads the sensor and handles signing?"
+
+tobyweston commented on Jun 10, 2017:
+"I can reproduce it with the help of an ice pack!
+
+e1 ff 4b 46 7f ff 0c 10 fe : crc=fe YES
+e1 ff 4b 46 7f ff 0c 10 fe t=-1937
+I think there's a problem in Parser.scala, I was trying to be all fancy and calculate the temperature using the raw byte values rather than use the scratch file pre-calculated value (t=-1.2). It has the advantage of being more precise. See http://temperature-machine.com/docs/ds18b20_sensor.html
+
+I may have been a bit naive with my above calculation. See the spec sheet: I think i'll be better off doing the proper two's complement on the bytes."
+
+blinkingbee commented on Jun 10, 2017:
+"Samples taken at 3 different temperatures with icepack from my freezer:
+w1_slave samples.zip
+
+It would be very useful if you could use the pre-calculated value from the scratchpad and thus exchange some precision for valid temperatures below zero."
+
+blinkingbee commented on Jun 10, 2017 via email:
+"Posted some examples for both +ve and -ve temperatures
+…
+
+ On 9 Jun 2017, at 20:08 , Toby ***@***.***> wrote:
+
+ Any chance you could post a couple of example files (e.g. from /sys/bus/w1/devices/28-0416a443d6ff/w1_slave)?
+
+ —
+ You are receiving this because you authored the thread.
+ Reply to this email directly, view it on GitHub <#13 (comment)>, or mute the thread <https://github.com/notifications/unsubscribe-auth/Ab8rCQzcOT3uUrL1dKXlCWlxHu7m4ewsks5sCZg8gaJpZM4N1TPZ>."
+
+tobyweston added a commit that referenced this issue on Jun 12, 2017
+@tobyweston
+#13 adding some extra test cases from @blinkingbee
+
+blinkingbee commented on Jun 12, 2017:
+"I have updated Parser.scala and ParserTest.scala in both client and server but temperatures below zero still display as large positive numbers. Is there anything else I need to do?"
+
+tobyweston commented on Jun 12, 2017:
+"I haven't deployed myself yet so am still testing. I'll prepare a 'package' once done and close the issue here.
+
+How are you deploying (see http://temperature-machine.com/docs/getting_started.html#setup-the-software).
+
+If you're building from source, you can test by following these instructions having first done the following;
+
+$ git pull
+$ git checkout issue_13"
+
+blinkingbee commented on Jun 12, 2017:
+"Thanks, maybe I jumped the gun here. I originally deployed using the pre-installed image. If I build from source does this just overwrite the original temperature-machine?"
+
+tobyweston commented on Jun 13, 2017:
+"Yep, on the pre-installed image under ~/code/temperature-machine. Just run the above and rebuild the .jar file (steps 2. from these instructions).
+
+So basically,
+
+cd ~/code/temperature-machine
+git pull
+git checkout issue_13
+sbt -J-Xmx512m -J-Xms512m assembly
+(You can drop/alter the -J settings if you're not running on a Pi Zero)
+
+Then restart.
+
+Note that this will checkout the branch so once it's merged back into master, you'll have to reverse the procedure (i.e, git checkout master then sbt assembly). I'll merge back after testing and building a new image etc (which will prob take a little while)
+
+Let me know how you get on.
+
+Oh, and I tend to take down the server / hub first to upgrade, then take down each child node. To be super safe, you can take them all down and update, server first."
+
+tobyweston closed this as completed in bf10a84 on Jun 13, 2017
+
+tobyweston commented on Jun 13, 2017:
+"Just merged bf10a84 to master so ignore the git checkout issue_13 step..."
+
+blinkingbee commented on Jun 13, 2017:
+"I have rebuilt both master and slave as described above but am still getting large positive numbers when temperature goes below zero. Separately monitoring the sensor scratch file pre-calculated value shows the correct negative temperature."
+
+tobyweston commented on Jun 13, 2017:
+"and the sbt assembly step worked for you? Sometimes it crashes on the Pi because of the limited resources and you have to re-run. Check the timestamp of the temperature-machine.jar file. Something like find . -name "*.jar" from the temperature-machine fold should locate it. Make sure it's been updated."
+
+blinkingbee commented on Jun 13, 2017:
+"-rw-r--r-- 1 pi pi 28515459 Apr  2 14:09 temperature-machine-2.0.jar It looks like it's not been updated so I'll try a rerun"
+
+tobyweston commented on Jun 13, 2017:
+"Cool, when you run sbt assembly (on the Pi zero in particular), it can fail more or less silently. Re-running usually works (but don't sbt clean first)."
+
+blinkingbee commented on Jun 13, 2017:
+"Mostly success. My two client units built successfully and the one I've tested displays negative temperatures correctly. However the server returns errors and won't build. I have attached the console output for your comment. I may have to start over with the server if I can't solve it.
+
+$ sbt -J-Xmx512m -J-Xms512m assembly
+...
+[error] Not a valid command: J-Xms512m
+[error] Not a valid key: J-Xms512m
+[error] J-Xms512m
+[error]"
+
+blinkingbee commented on Jun 14, 2017:
+"I have fixed server by re-installing from image then rebuilding from git. Great to see 24h time in main graph now and I see you have removed reference to sensor serial numbers too. Thanks for your help."
+
+tobyweston commented on Jun 14, 2017:
+"Great stuff, glad its working for you! (BTW, if you have more than one sensor attached, it'll display the serial numbers again). 😄"
+
+tobyweston added the bug label on Nov 15, 2017

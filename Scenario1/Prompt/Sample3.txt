@@ -1,0 +1,78 @@
+Title:AVCaptureVideoPreviewLayer does not detect objects in two ranges of the screen
+
+Question:I downloaded Apple's project about recognizing Objects in Live Capture. When I tried the app I saw that if I put the object to recognize on the top or on the bottom of the camera view, the app doesn't recognize the object:
+
+In this first image the banana is in the center of the camera view and the app is able to recognize it.
+
+image object in center
+
+In these two images the banana is near to the camera view's border and it is not able to recognize the object.
+
+image object on top
+
+image object on bottom
+
+This is how session and previewLayer are set:
+
+ func setupAVCapture() {
+    var deviceInput: AVCaptureDeviceInput!
+
+    // Select a video device, make an input
+    let videoDevice = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back).devices.first
+    do {
+        deviceInput = try AVCaptureDeviceInput(device: videoDevice!)
+    } catch {
+        print("Could not create video device input: \(error)")
+        return
+    }
+
+    session.beginConfiguration()
+    session.sessionPreset = .vga640x480 // Model image size is smaller.
+
+    // Add a video input
+    guard session.canAddInput(deviceInput) else {
+        print("Could not add video device input to the session")
+        session.commitConfiguration()
+        return
+    }
+    session.addInput(deviceInput)
+    if session.canAddOutput(videoDataOutput) {
+        session.addOutput(videoDataOutput)
+        // Add a video data output
+        videoDataOutput.alwaysDiscardsLateVideoFrames = true
+        videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+        videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
+    } else {
+        print("Could not add video data output to the session")
+        session.commitConfiguration()
+        return
+    }
+    let captureConnection = videoDataOutput.connection(with: .video)
+    // Always process the frames
+    captureConnection?.isEnabled = true
+    do {
+        try  videoDevice!.lockForConfiguration()
+        let dimensions = CMVideoFormatDescriptionGetDimensions((videoDevice?.activeFormat.formatDescription)!)
+        bufferSize.width = CGFloat(dimensions.width)
+        bufferSize.height = CGFloat(dimensions.height)
+        videoDevice!.unlockForConfiguration()
+    } catch {
+        print(error)
+    }
+    session.commitConfiguration()
+    previewLayer = AVCaptureVideoPreviewLayer(session: session)
+    previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+    rootLayer = previewView.layer
+    previewLayer.frame = rootLayer.bounds
+    rootLayer.addSublayer(previewLayer)
+}
+You can download the project here, I am wondering if it is normal or not.
+
+Is there any solutions to fix? Does it take square photos to elaborate with coreml and the two ranges are not included? Any hints? Thanks
+
+Answer:
+That's probably because the imageCropAndScaleOption is set to centerCrop.
+
+The Core ML model expects a square image but the video frames are not square. This can be fixed by setting the imageCropAndScaleOption option on the VNCoreMLRequest. However, the results may not be as good as with center crop (it depends on how the model was originally trained).
+
+See also VNImageCropAndScaleOption in the Apple docs.

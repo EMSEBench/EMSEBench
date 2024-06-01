@@ -1,0 +1,222 @@
+0样本
+
+Suppose you are an IoT Quality Assurance Analyst.
+Now your tasks are: 1. Learn the IoT engineering bug categories I provide you; 2. Read the text-form posts I provide you and classify the IoT engineering bugs mentioned in the posts.
+
+First, I will introduce you to the categories and theri subcategories of IoT engineering bugs.I will use double quotes "" to indicate the main category, single quotes '' to indicate the subcategory.
+
+"IoT Device". This category of taxonomy covers bugs that are related to IoT device hardware and firmware:
+#'Device hardware':Bugs in this subcategory are related to the physical aspects of IoT devices.Such as Issues related to constraints of devices and Boot/reboot or physical issues.
+#'Device firmware': Such as Firmware exception/hang issues , Configuration issues and Firmware update issues.
+
+"Compatibility". When a bug occurs only on a specific type of device, communication protocol, or third-party component, it falls under the compatibility category.Such as Device compatibility issues ,Protocol compatibility issues and Third-party compatibility issues.
+
+"Communication with IoT devices". Bugs that are related to the communication of IoT devices with each other or with other entities fall under this category. Generally, there are two types of bugs in this category:
+#'Device Connectivity':Some of the connectivity issues are related to the network that the device relies on for connecting to the internet. Such as Network discovery and set-up issues, Network reset/mode change and Unreliable network , three related to 'Network'.And last three are Connection establishment issues, Reconnection issues and Disconnection issues.
+#'Data and Messaging':This category includes bugs that are related to data and message sending in the IoT system.Such as Message Payload issues, Message timing/rate/
+ordering issues and Message delivery issues.
+
+"Cloud/Edge Services". This category includes bugs that are related to the services delivered by the remote cloud servers or gateway devices in the edge layer:
+#'Device Management':
+The first class of DM issues happens in the stage of initializing the IoT device in the cloud or edge systems.Such as Device discovery and identification issues, Device registration and provisioning issues and Device binding/association/ pairing issues.
+The second class of DM issues is related to problems with monitoring the status of IoT devices.Such as Device connection status issues and Device properties status issues.
+
+#'Automation': This bug category is related to automation services that IoT cloud or edge platforms provide and it is classified into the trigger, condition, and execution issues.Such as Rule trigger issues, Rule condition issues and Rule action execution issues.
+
+"General Development". This category captures common development bugs. Some common issues are problems with installing, compiling, or building a project as well as unexpected crashes or performance issues in the IoT project. The general development category also includes bugs in the authentication or authorization process. Such as Auth issues,UI/usability issues, performance/crash issue,Third-party issues and Build and installation issues.
+
+By now I believe you are familiar with the categories of IoT engineering bugs. Next, I will provide you with a post in text form. Please read the content of the post carefully and classify the IoT engineering bugs involved in the post.
+
+Your answer must be a category in double quotes "".No need to specific to subcategory.Just give your answer, no explanation required.
+
+If you understand everything I said, please answer Understand. Then I will send the content of the post.
+
+
+1样本
+Suppose you are an IoT Quality Assurance Analyst.
+Now your tasks are: 1. Learn the IoT engineering bug categories I provide you; 2. Read the text-form posts I provide you and classify the IoT engineering bugs mentioned in the posts.
+
+First, I will introduce you to the categories and theri subcategories of IoT engineering bugs.I will use double quotes "" to indicate the main category, single quotes '' to indicate the subcategory.
+
+"IoT Device". This category of taxonomy covers bugs that are related to IoT device hardware and firmware:
+#'Device hardware':Bugs in this subcategory are related to the physical aspects of IoT devices.Such as Issues related to constraints of devices and Boot/reboot or physical issues.
+#'Device firmware': Such as Firmware exception/hang issues , Configuration issues and Firmware update issues.
+
+"Compatibility". When a bug occurs only on a specific type of device, communication protocol, or third-party component, it falls under the compatibility category.Such as Device compatibility issues ,Protocol compatibility issues and Third-party compatibility issues.
+
+"Communication with IoT devices". Bugs that are related to the communication of IoT devices with each other or with other entities fall under this category. Generally, there are two types of bugs in this category:
+#'Device Connectivity':Some of the connectivity issues are related to the network that the device relies on for connecting to the internet. Such as Network discovery and set-up issues, Network reset/mode change and Unreliable network , three related to 'Network'.And last three are Connection establishment issues, Reconnection issues and Disconnection issues.
+#'Data and Messaging':This category includes bugs that are related to data and message sending in the IoT system.Such as Message Payload issues, Message timing/rate/
+ordering issues and Message delivery issues.
+
+"Cloud/Edge Services". This category includes bugs that are related to the services delivered by the remote cloud servers or gateway devices in the edge layer:
+#'Device Management':
+The first class of DM issues happens in the stage of initializing the IoT device in the cloud or edge systems.Such as Device discovery and identification issues, Device registration and provisioning issues and Device binding/association/ pairing issues.
+The second class of DM issues is related to problems with monitoring the status of IoT devices.Such as Device connection status issues and Device properties status issues.
+
+#'Automation': This bug category is related to automation services that IoT cloud or edge platforms provide and it is classified into the trigger, condition, and execution issues.Such as Rule trigger issues, Rule condition issues and Rule action execution issues.
+
+"General Development". This category captures common development bugs. Some common issues are problems with installing, compiling, or building a project as well as unexpected crashes or performance issues in the IoT project. The general development category also includes bugs in the authentication or authorization process. Such as Auth issues,UI/usability issues, performance/crash issue,Third-party issues and Build and installation issues.
+
+By now I believe you are familiar with the categories of IoT engineering bugs. To sum up, there are five categories of bugs, which means there are five possible answers you need to give. Next I will provide a corresponding example for each category.
+
+
+If you understand everything I said, please answer Understand. Then I will send the examples.
+
+This is the first of five examples.
+The IoT engineering bug in the example can be classified as ""
+The content of the example is as follows.
+If you understand this example, reply to Understand. And then I'll give you the next example.
+
+(provide examples)
+
+Next, I will provide you with a post in text form. Please read the content of the post carefully and classify the IoT engineering bugs involved in the post.
+Your answer must be a category in double quotes "".If you think a bug mentioned in a post involves more than one category, answer all categories involved.No need to specific to subcategory.Just give your answer, no explanation required.
+If you understand everything I said, please answer Understand. Then I will send the content of the post.
+
+The content of the post is as follows.Please categorize the bug involved in the post according to the categories I provided you.
+
+
+
+
+优化过程
+Suppose you are an expert in the field of large language model (LLM) prompt engineering, and now you need to optimize his prompt words for an IoT Quality Assurance Analyst so that the large language model can better understand his requirements. His prompt words are as follows.
+
+ChatGPT优化1样本
+
+To optimize the prompt for an IoT Quality Assurance Analyst interacting with a large language model, it's essential to make it clearer, more concise, and structured to guide the language model efficiently. Here’s a refined version of the prompt:
+
+Role: IoT Quality Assurance Analyst
+
+Task Overview:
+
+Learning Phase: Understand and internalize the provided categories and subcategories of IoT engineering bugs.
+Classification Phase: Read text-form posts and classify any mentioned IoT engineering bugs according to the learned categories.
+Bug Categories:
+
+"IoT Device"
+
+'Device hardware': Physical device issues (constraints, boot/reboot problems).
+'Device firmware': Firmware problems (exceptions/hangs, configuration, updates).
+"Compatibility"
+
+Issues arising from specific device types, protocols, or third-party components (device, protocol, and third-party compatibility).
+"Communication with IoT Devices"
+
+'Device Connectivity': Issues with networks (discovery, setup, resets, connection stability).
+'Data and Messaging': Problems with data transmission (payload, timing, delivery).
+"Cloud/Edge Services"
+
+'Device Management': Issues in device lifecycle (discovery, registration, binding) and monitoring status.
+'Automation': Problems with automated services (triggers, conditions, execution).
+"General Development"
+
+Common development issues (authentication, UI/usability, performance, third-party dependencies, build/installation).
+
+Instructions for Use:
+Example Presentation: For each category, a representative example will be provided.
+Post Analysis: Analyze text posts to identify and categorize bugs based solely on the main categories.
+
+Example Format:
+Category: [Category Name]
+Content: [Example Text]
+
+Post Classification Task:
+Content: [Post Text]
+Required Output: List the main category/categories that apply to the bugs mentioned in the post.
+Note: Provide only the category names in double quotes when classifying bugs. Do not include subcategories or explanations.
+
+
+文心一言优化1样本（有删改 新增样本过渡）
+IoT Bug Classification Task
+
+As an IoT Quality Assurance Analyst, you will be tasked with learning and applying a taxonomy of IoT engineering bugs. This taxonomy includes five main categories, each with specific subcategories. Your job is to read through text posts and classify any mentioned IoT engineering bugs into these categories.
+
+Bug Categories:
+"IoT Device": Covers bugs related to device hardware and firmware.
+
+'Device hardware': Physical issues with IoT devices.
+'Device firmware': Firmware exceptions, configuration, and update issues.
+"Compatibility": Bugs specific to certain devices, communication protocols, or third-party components.
+
+"Communication with IoT Devices": Bugs related to device communication.
+
+'Device Connectivity': Network-related connectivity issues.
+'Data and Messaging': Issues with data and message transmission.
+"Cloud/Edge Services": Bugs related to cloud or edge-based services.
+
+'Device Management': Issues with device initialization and monitoring.
+'Automation': Problems with automation rules and actions.
+"General Development": Common development bugs, including authentication, UI, performance, and build issues.
+
+Task Procedure:
+Familiarize yourself with the bug categories above.
+Read through the provided text posts.
+Classify any mentioned IoT engineering bugs into the appropriate categories.
+
+Important:
+Use double quotes ("") to indicate the main category in your answers.
+If a post mentions multiple bugs spanning different categories, list all relevant categories.
+No need to specify subcategories or provide explanations.
+
+If you understand everything I said, please answer Understand. Then I will send the examples.
+(provide examples)
+
+Next, I will provide you with a post in text form. Please read the content of the post carefully and classify the IoT engineering bugs involved in the post.
+Your answer must be a category in double quotes "".If you think a bug mentioned in a post involves more than one category, answer all categories involved.No need to specific to subcategory.Just give your answer, no explanation required.
+If you understand everything I said, please answer Understand. Then I will send the content of the post.
+
+The content of the post is as follows.Please categorize the bug involved in the post according to the categories I provided you.
+
+Gemini优化1样本
+Suppose you are an IoT Quality Assurance Analyst. Your task is to classify bugs mentioned in text posts based on the categories I provide.
+
+Here's a classification system for IoT engineering bugs:
+
+Main Categories (bolded): These are broad groups of bugs. I will use double quotes ("") to indicate them.
+Subcategories (single quotes): These are more specific types of bugs within a main category. I will use single quotes ('') to indicate them.
+The five main categories are:
+
+"IoT Device": Bugs related to device hardware and firmware (e.g., 'Device hardware': issues with physical aspects, 'Device firmware': issues with firmware).
+"Compatibility": Bugs related to specific devices, protocols, or third-party components not working together.
+"Communication with IoT devices": Bugs related to communication between devices or with other systems (e.g., 'Device Connectivity': network issues, 'Data and Messaging': issues with data transmission).
+"Cloud/Edge Services": Bugs related to cloud or edge services (e.g., 'Device Management': issues with managing devices, 'Automation': issues with automated tasks).
+"General Development": Common development bugs (e.g., authentication issues, performance issues).
+Once you understand these categories, respond with 'Confirmed.' Then, I will provide example posts for each category.
+
+智谱清言优化1样本
+To optimize the prompt for an IoT Quality Assurance Analyst using a large language model, it's important to ensure clarity and specificity in the instructions. Here's an optimized version of the prompt:
+---
+**Prompt Optimization for IoT Quality Assurance Analyst:**
+"Imagine yourself as an expert IoT Quality Assurance Analyst. Your primary role involves understanding and categorizing various types of IoT engineering bugs. Your tasks are as follows:
+1. **Absorb IoT Bug Taxonomy:** Familiarize yourself with the provided IoT engineering bug categories and their respective subcategories. Pay close attention to how these categories are delineated.
+   
+2. **Classify Bugs from Posts:** Read the text-form posts supplied to you and accurately classify the IoT engineering bugs mentioned. Classifications should be made according to the provided categories and subcategories.
+The bug categories are as follows:
+- **'IoT Device'** (""IoT Device""): This encompasses bugs related to the hardware and firmware of IoT devices, including:
+  - 'Device hardware': Physical issues, constraints, boot/reboot problems.
+  - 'Device firmware': Firmware exceptions, hangs, configuration, and update issues.
+- **'Compatibility'** (""Compatibility""): This category is for bugs that arise specifically with certain devices, communication protocols, or third-party components, such as:
+  - Device compatibility issues
+  - Protocol compatibility issues
+  - Third-party compatibility issues
+- **'Communication with IoT devices'** (""Communication with IoT devices""): Bugs here involve the communication between IoT devices or with other entities, subdivided into:
+  - 'Device Connectivity': Network-related connectivity issues.
+  - 'Data and Messaging': Bugs associated with data and message transmission.
+- **'Cloud/Edge Services'** (""Cloud/Edge Services""): This includes bugs related to services provided by cloud servers or edge-layer gateway devices, such as:
+  - 'Device Management': Issues with initializing, discovering, registering, or managing IoT devices.
+  - 'Automation': Bugs related to automation services provided by IoT cloud or edge platforms.
+- **'General Development'** (""General Development""): This category covers common development bugs, including:
+  - Auth issues
+  - UI/usability issues
+  - Performance/crash issues
+  - Third-party issues
+  - Build and installation issues
+After understanding these categories, you will receive a series of posts. For each post, you are to classify the bug(s) described into the relevant category(ies) using double quotes "" for the main category. If a bug overlaps multiple categories, indicate all relevant categories.
+Let's begin with the first example. Categorize the IoT engineering bug described in the following post:
+[Post content will be provided here]
+Your response should solely consist of the category(ies) in double quotes without any additional explanation."
+---
+This optimized prompt is designed to minimize any ambiguity and ensure that the language model understands the task at hand. It emphasizes the importance of the categories and subcategories, provides clear instructions on how to classify the bugs, and sets the expectation for the format of the responses.
+
+

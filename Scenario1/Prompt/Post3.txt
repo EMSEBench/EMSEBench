@@ -1,0 +1,107 @@
+Title:Some of the operators in the model are not supported by the standard TensorFlow Lite runtime. If those are native TensorFlow operators, you might be able to use the extended runtime by passing --enable_select_tf_ops, or by setting target_ops=TFLITE_BUILTINS,SELECT_TF_OPS when calling tf.lite.TFLiteConverter(). Otherwise, if you have a custom implementation for them you can disable this error with --allow_custom_ops, or by setting allow_custom_ops=True when calling tf.lite.TFLiteConverter(). Here is a list of builtin operators you are using: AVERAGE_POOL_2D, CONCATENATION, CONV_2D, FULLY_CONNECTED, MAX_POOL_2D, MEAN, RELU, SOFTMAX, STRIDED_SLICE. Here is a list of operators for which you will need custom implementations: AddV2.
+
+ammu11 commented on Oct 16, 2019:
+System information
+·OS Platform and Distribution (e.g., Linux Ubuntu 16.04):
+·TensorFlow installed from (source or binary):
+·TensorFlow version (or github SHA if from source):
+
+Provide the text output from tflite_convert
+# Copy and paste here
+Also, please include a link to a GraphDef or the model if possible.
+
+Any other info / logs
+
+Include any logs or source code that would be helpful to diagnose the problem. If including tracebacks, please include the full traceback. Large logs and files should be attached.
+
+gadagashwini-zz self-assigned this on Oct 16, 2019
+gadagashwini-zz added comp:lite type:support labels on Oct 16, 2019
+
+gadagashwini-zz commented on Oct 16, 2019:
+@ammu11, Please Provide the exact sequence of commands / steps that you executed before running into the problem. And also provide the Tensorflow version. Thanks!
+
+gadagashwini-zz added the stat:awaiting response label on Oct 16, 2019
+
+ammu11 commented on Oct 17, 2019 via email:
+While converting pb file to tflite, facing this issue. And my tensorflow
+version is 1.14.0. And here is the tflite command which I have used
+-> tflite_convert --output_file=D:/Images/car-damage-dataset/fnp.tflite
+--graph_def_file=D:/Images/car-damage-dataset/fnp.pb
+--input_shapes=1,224,224,3 --input_arrays=input_1 --output_arrays=output_0
+--mean_values=0 --std_dev_values=128 --allow_custom_ops
+…
+
+On Wed, Oct 16, 2019 at 4:49 AM gadagashwini ***@***.***> wrote:
+ @ammu11 <https://github.com/ammu11>, Please Provide the exact sequence of
+ commands / steps that you executed before running into the problem. And
+ also provide the Tensorflow version. Thanks!
+
+ —
+ You are receiving this because you were mentioned.
+ Reply to this email directly, view it on GitHub
+ <#33393?email_source=notifications&email_token=AJLB5LDHKULAN745EDYSGULQO3ITDA5CNFSM4JBB66GKYY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGOEBLVDEQ#issuecomment-542593426>,
+ or unsubscribe
+ <https://github.com/notifications/unsubscribe-auth/AJLB5LC5YUVN6KR5VQFHRCLQO3ITDANCNFSM4JBB66GA>
+ .
+
+tensorflowbutler removed the stat:awaiting response label on Oct 17, 2019
+gadagashwini-zz added the TF 1.14 label on Oct 17, 2019
+gadagashwini-zz assigned haozha111 and unassigned gadagashwini-zz on Oct 17, 2019
+gadagashwini-zz added the stat:awaiting tensorflower label on Oct 17, 2019
+
+haozha111 commented on Oct 18, 2019
+Could you paste your .pb file here so that i can give it a try?
+
+tensorflowbutler removed the stat:awaiting tensorflower label on Oct 22, 2019
+
+andreydung commented on Oct 24, 2019:
+I have the exactly the same problem. Running the sample code from doc:
+
+import tensorflow as tf
+
+model = tf.keras.applications.MobileNetV2(
+    weights="imagenet", input_shape=(224, 224, 3))
+
+# Convert the model.
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+I used tf2.0, tf2.0-rc1 but these operations are still not found:
+
+Here is a list of operators for which you will need custom implementations: AddV2, FusedBatchNormV3.
+
+ammu11 commented on Oct 24, 2019 via email:
+Thanks for your reply.
+
+I have updated the tensorflow version to 1.15.0 and worked for me.
+…
+
+On Thu, Oct 24, 2019 at 5:24 AM Dzung Nguyen ***@***.***> wrote:
+ I have the exactly the same problem. Running the sample code from doc:
+
+ import tensorflow as tf
+
+ model = tf.keras.applications.MobileNetV2(
+     weights="imagenet", input_shape=(224, 224, 3))
+
+ # Convert the model.
+ converter = tf.lite.TFLiteConverter.from_keras_model(model)
+ tflite_model = converter.convert()
+
+ I used tf2.0, tf2.0-rc1 but these operations are still not found:
+
+ Here is a list of operators for which you will need custom implementations: AddV2, FusedBatchNormV3.
+
+ —
+ You are receiving this because you were mentioned.
+ Reply to this email directly, view it on GitHub
+ <#33393?email_source=notifications&email_token=AJLB5LH6W2JZNULOTDOWJWLQQFSVLA5CNFSM4JBB66GKYY3PNVWWK3TUL52HS4DFVREXG43VMVBW63LNMVXHJKTDN5WW2ZLOORPWSZGOECEJM7Q#issuecomment-545822334>,
+ or unsubscribe
+ <https://github.com/notifications/unsubscribe-auth/AJLB5LEOUDBDMTZOFGP7W4TQQFSVLANCNFSM4JBB66GA>
+ .
+
+haozha111 closed this as completed on Oct 25, 2019
+Saduf2019 mentioned this issue on May 15, 2020
+Tf Lite conversion error #39558
+
+zldrobit mentioned this issue on Aug 12, 2020
+How to avoid AddV2 op in TFLite model? #42256

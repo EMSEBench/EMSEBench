@@ -1,0 +1,29 @@
+Title:Update production-ready-features.adoc #7596
+
+166MMX commented on Dec 8, 2016:
+"Fix broke source code snippet:
+Replace line break with missing line fold "\\n" to continue the property value"
+
+pivotal-issuemaster commented on Dec 8, 2016:
+"@166MMX Please sign the Contributor License Agreement!
+
+Click here to manually synchronize the status of this Pull Request.
+
+See the FAQ for frequently asked questions."
+
+spring-projects-issues added the status: waiting-for-triage label on Dec 8, 2016
+
+pivotal-issuemaster commented on Dec 8, 2016:
+"@166MMX Thank you for signing the Contributor License Agreement!"
+
+philwebb added this to the 1.4.3 milestone on Dec 9, 2016
+philwebb added type: documentation and removed status: waiting-for-triage labels on Dec 9, 2016
+snicoll self-assigned this on Dec 15, 2016
+snicoll added a commit that referenced this pull request on Dec 15, 2016
+@snicoll
+Merge pull request #7596 from 166MMX:patch-1 …
+cfad35a
+* pr/7596:
+  Update production-ready-features.adoc
+
+snicoll closed this in 9746c63 on Dec 15, 2016

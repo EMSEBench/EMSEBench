@@ -1,0 +1,28 @@
+Title:Pushpin: build process takes very long time #24
+harishanand95 commented on Dec 28, 2017:
+"Submission type
+ Bug report
+ Request for enhancement (RFE)
+Middleware version the issue has been seen with
+smartcity-middleware v0.1.0.alpha
+
+Bug Report
+Pushpin takes a very long time to build. This could be because of make or git commands used in the Dockerfile."
+
+harishanand95 added the bug label on Dec 28, 2017
+harishanand95 mentioned this issue on Dec 28, 2017
+WIP: Port OpenBSD LDAP to linux #23
+
+harishanand95 added a commit that referenced this issue on Jan 4, 2018
+@harishanand95
+ldap: Port OpenBSD LDAP to linux (Issue #22) …
+19eb574
+Fixes issue: #24, #22 
+
+Signed-off-by: Harish Anand <harishanand95@gmail.com>
+
+harishanand95 commented on Jan 4, 2018:
+"Fixed in PR #23"
+
+harishanand95 closed this as completed on Jan 4, 2018
+pct960 added this to Done in Smart City on Jul 12, 2018

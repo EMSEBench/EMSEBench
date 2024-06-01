@@ -1,0 +1,70 @@
+0样本
+Suppose you are a software developer and frequently turn to StackOverflow (SO) for your programming needs.While manually inspecting SO answer posts, we observed that answers to different kinds of questions have different linguistic forms. 
+
+Now you are required to categorize SO posts based on their question types.
+We divide question types into three categories:
+1.conceptual questions: asking for clarifications on a concept.
+2.how-to questions: asking for instructions for achieving a task.
+3.bug fixing questions: asking for solutions to fix some issues.
+
+Just answer type numbers (1,2 and 3), no explanation required.
+If you understand everything I said, please answer Understand.Then I would send the questions of SO posts.
+
+1样本
+Suppose you are a software developer and frequently turn to StackOverflow (SO) for your programming needs.While manually inspecting SO answer posts, we observed that answers to different kinds of questions have different linguistic forms. 
+
+Now you are required to categorize SO posts based on their question types.
+We divide question types into three categories:
+1.conceptual questions: asking for clarifications on a concept.(e.g.,"what are metaclasses in Python?")
+2.how-to questions: asking for instructions for achieving a task.(e.g.,"how do I undo the most recent local commits in Git?")
+3.bug fixing questions: asking for solutions to fix some issues.(e.g.,"git is not working after macOS Update")
+
+Just answer type numbers (1,2 and 3), no explanation required.
+If you understand everything I said, please answer Understand.Then I would send the questions of SO posts.
+
+优化过程
+Suppose you are an expert in the field of large language model (LLM) prompt engineering. Now you are required to help a software development engineer optimize his prompt words so that the large language model can better understand his needs.
+
+His prompt words are as follows.The content of the prompt word is enclosed in brackets:
+
+ChatGPT优化1样本
+I am a software developer who uses StackOverflow (SO) frequently. SO answers vary linguistically based on the type of question. Your task is to categorize SO posts into three question types:
+Conceptual questions (e.g., 'What are metaclasses in Python?') — These ask for clarifications on concepts.
+How-to questions (e.g., 'How do I undo the most recent local commits in Git?') — These seek instructions to accomplish a task.
+Bug fixing questions (e.g., 'Git is not working after macOS Update') — These request solutions for issues.
+
+Please respond with just the type number (1, 2, or 3) for each question I send. No further explanations are needed.
+Respond with 'Understand' if this is clear, and then I will start sending the SO questions.
+
+文心一言优化1样本
+Assume the role of a software developer who regularly consults StackOverflow (SO) for programming solutions. Your task is to categorize SO posts based on the type of question asked.
+
+Categorize each post into one of the following three types:
+Conceptual Questions: Seeking clarification on a specific programming concept (e.g., "What are metaclasses in Python?").
+How-To Questions: Requesting instructions or methods to achieve a particular programming task (e.g., "How do I undo the most recent local commits in Git?").
+Bug Fixing Questions: Asking for help to resolve a specific programming issue or bug (e.g., "Git is not working after macOS Update").
+
+For each SO post question, respond only with the corresponding type number (1, 2, or 3). Do not provide any explanations or additional comments.
+If you understand these instructions, reply with "Understand". Afterward, I will send you the SO post questions for categorization.
+
+Gemini优化1样本（有删改）
+The goal is to categorize Stack Overflow posts based on their question types. Classify each question with a type number: 1 (conceptual), 2 (how-to), 3 (bug fixing).
+
+Examples:
+Question: "What are metaclasses in Python?" (Type: 1)
+Question: "How do I undo the most recent local commits in Git?" (Type: 2)
+Question: "git is not working after macOS Update" (Type: 3)
+
+If you understand everything I said, please answer Understand.Then I would send the questions of SO posts.
+
+
+智谱清言优化1样本（需要删掉Understand部分 判断能力较差）（有删改）
+
+Imagine you are an advanced software developer with a deep understanding of programming concepts and practices. You often rely on Stack Overflow (SO) to find solutions and insights for your coding challenges. You've noticed that answers on SO vary depending on the type of question asked.
+Your task is to create a classification system for SO posts based on the nature of the questions. The goal is to accurately differentiate between three distinct types of questions:
+1. Conceptual Questions: These are inquiries that seek a clearer understanding of programming concepts or theoretical aspects of software development. Examples include questions about the nature of design patterns, the explanation of specific programming paradigms, or the clarification of how certain programming language features work. For instance, a conceptual question might be 'Can you explain the factory method design pattern?' or 'What are the differences between functional and object-oriented programming languages?'
+2. How-to Questions: These are practical queries where the asker is looking for step-by-step guidance or a tutorial on how to accomplish a specific task or implement a feature. These questions often require a detailed and actionable answer. Examples include 'How do I create a RESTful API in Django?' or 'Can you provide a guide on setting up a continuous integration pipeline with Jenkins?'
+3. Bug Fixing Questions: These are problem-solving oriented questions where developers are trying to find solutions to errors or issues they are facing in their code or development environment. These questions typically involve specific error messages, unexpected behaviors, or system failures. Examples include 'I'm getting a 'Segmentation fault' error when running my C++ program, how can I fix this?' or 'After updating to the latest version of Node.js, my application is crashing with a 'TypeError,' what could be the cause?'
+Your job is to create a prompt that will guide the large language model to accurately identify and categorize these different types of questions from Stack Overflow posts. 
+Just answer type numbers (1,2 and 3), no explanation required.
+If you understand everything I said, please answer Understand.Then I would send the questions of SO posts.

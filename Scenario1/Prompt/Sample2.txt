@@ -1,0 +1,187 @@
+Title:[TensorFlow Lite] GPU experimental does not work with converted SSD model
+
+val9299 commented on Aug 25, 2019:
+System information
+
+Have I written custom code (as opposed to using a stock example script provided in TensorFlow): no (for the demo APPs);
+yes (for the object detection APP), but only added GPU delegates and used a self-converted SSD float model
+Mobile device (e.g. iPhone 8, Pixel 2, Samsung Galaxy): Google Pixel 2 XL (Android 8.0.0 and Android 9)
+TensorFlow Lite version: GPU experimental 0.0.1 (I tested version 0.0.0 as well)
+OS Platform and Distribution (e.g., Linux Ubuntu 16.04): Windows 64 bit
+TensorFlow installed from (source or binary): binary
+TensorFlow version (use command below): 1.13.1
+Python version: 3.6.8
+CUDA/cuDNN version: 10.0 / 7.6.0
+GPU model and memory: GeForce GTX 970, AMD64
+Describe the current behavior
+I only got to run the demo APP on GPU with GPU experimental but not the object detection APP. For the object detection APP I had to add the GPU delegates, change some code, and use a self-converted SSD model.
+
+The error occurs because of the converted SSD model. GPU delegate does not support TFLite_Detection_PostProcess. But this option is necessary to convert an SSD model successfully (with 4 outputs). This is the way I convert the ssdlite mobilenet model from model zoo: #31015 (comment). This is also the way which was recommended to me, because the conversion did not work with the frozen model provided by model zoo (or by getting the frozen model with the inference_graph script).
+
+Describe the expected behavior
+I want to run the object detection APP on GPU by using GPU experimental with a self-converted SSD model.
+
+Code to reproduce the issue
+I changed the current demo APP to GPU experimental and I had to do some minor changes in the code to get the APP running successfully on GPU. (To know which changes to make, I looked into the demo APP version r1.13.)
+
+For the object detection APP I added the GPU delegates, changed isModelQuantized to false (and don't use isQuantized anymore), and use a self-converted SSD mobilenet model (because the APP is currently written for quantized models using CPU and doesn’t have GPU delegates in the original code). I wrote the delegates as described in https://www.tensorflow.org/lite/performance/gpu_advanced#android_java and I converted the model this way: #31015 (comment). Then, I applied the same changes to the object detection APP as I did to the current demo APP before (by using the knowledge of demo APP version r1.13).
+
+Current demo APP: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/java/demo
+Demo APP version r1.13: https://github.com/tensorflow/tensorflow/tree/r1.13/tensorflow/lite/java/demo
+Object Detection APP: https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/android
+Performance results tested on Google Pixel 2 XL (with Android 8.0.0 and Android 9):
+
+Demo APP version r1.13
+
+Quantized Model + CPU -> 80ms
+Float Model + CPU -> 90ms
+Float Model + GPU -> 38ms
+Current demo APP
+
+Quantized Model + CPU -> 80ms
+Float Model + CPU -> 150ms
+Float Model + GPU -> 28ms
+Object Detection APP
+
+(self-converted) Float Model + GPU -> ERROR
+Full error
+When running the object detection APP with GPU experimental 0.0.1 and a converted SSDlite mobilenet model.
+
+E/AndroidRuntime: FATAL EXCEPTION: inference
+    Process: org.tensorflow.lite.examples.detection, PID: 4159
+    java.lang.IllegalArgumentException: Internal error: Failed to run on the given Interpreter: Next operations are not supported by GPU delegate:
+    CUSTOM TFLite_Detection_PostProcess: Operation is not supported.
+    First 114 operations will run on the GPU, and the remaining 1 on the CPU.TfLiteGlDelegate Invoke: Delegate should run on the same thread where it was initialized.Node number 115 (TfLiteGlDelegate) failed to invoke.
+
+        at org.tensorflow.lite.NativeInterpreterWrapper.run(Native Method)
+        at org.tensorflow.lite.NativeInterpreterWrapper.run(NativeInterpreterWrapper.java:149)
+        at org.tensorflow.lite.Interpreter.runForMultipleInputsOutputs(Interpreter.java:275)
+        at org.tensorflow.lite.examples.detection.tflite.TFLiteObjectDetectionAPIModel.recognizeImage(TFLiteObjectDetectionAPIModel.java:214)
+        at org.tensorflow.lite.examples.detection.DetectorActivity$2.run(DetectorActivity.java:181)
+        at android.os.Handler.handleCallback(Handler.java:789)
+        at android.os.Handler.dispatchMessage(Handler.java:98)
+        at android.os.Looper.loop(Looper.java:164)
+        at android.os.HandlerThread.run(HandlerThread.java:65)
+(Note: With GPU experimental 0.0.0 it neither works but the camera keeps running, the model is not used, and therefore, nothing will be detected. No error occurs and only by debugging the APP, you can find out when the APP stops working properly. It’s in the same line as before with 0.0.1 but the APP doesn't display any error. Therefore, 0.0.1 should be used in order to see what's going wrong.)
+
+Questions
+
+Is there another way to convert an SSD model successfully (with 4 outputs) which then works with GPU delegate?
+Will GPU delegate support TFLite_Detection_PostProcess in the near future? When would this be approximately?
+Is there another way to solve this problem? - The goal is using the object detection APP on GPU with a self-converted SSD model (preferred with GPU experimental). (I couldn't get GPU nightly to work properly neither, the APP seems to run on CPU: [TensorFlow Lite] GPU delegates on Android with GPU nightly fail to run on GPU (it seems to run on CPU) #31948)
+Thanks in advance!
+
+freedomtan commented on Aug 25, 2019:
+The post-processing part, implemented as a custom op is not supported by GPU Delegate. That's why you saw
+
+   CUSTOM TFLite_Detection_PostProcess: Operation is not supported.
+   First 114 operations will run on the GPU, and the remaining 1 on the CPU.
+in messages you showed. If it goes well, that's not a problem. And, the custom op is supposed to be run on CPUs, that is falling back to TFLite CPU interpreter. However, it seems there was something wrong. Did you check that when calling Interpreter::ModifyGraphWithDelegate() or Interpreter::Invoke(), the caller has an EGLContext in the current thread and Interpreter::Invoke() is called from the same EGLContext. In your messages, there are
+
+TfLiteGlDelegate Invoke: Delegate should run on the same thread where it was initialized.Node number 115 (TfLiteGlDelegate) failed to invoke.
+The constraint is said in Advance GPU
+
+When calling Interpreter::ModifyGraphWithDelegate() or Interpreter::Invoke(), the caller must have an EGLContext in the current thread and Interpreter::Invoke() must be called from the same EGLContext. If an EGLContext does not exist, the delegate will internally create one, but then the developer must ensure that Interpreter::Invoke() is always called from the same thread in which Interpreter::ModifyGraphWithDelegate() was called.
+
+ravikyram self-assigned this on Aug 26, 2019
+ravikyram added comp:lite TF 1.13 type:support labels on Aug 26, 2019
+ravikyram assigned impjdi and unassigned ravikyram on Aug 26, 2019
+ravikyram added the stat:awaiting tensorflower label on Aug 26, 2019
+
+val9299 commented on Aug 26, 2019
+Thank you for the explanation! Then the real issue is how to get interpreter.run() to run on the same thread where it was initialized.
+
+The interpreter tfLite is initialized in TFLiteObjectDetectionAPIModel.create() but tfLite.runForMultipleInputsOutputs(inputArray, outputMap) is used in TFLiteObjectDetectionAPIModel.recognizeImage() which is called in a separate thread.
+
+For testing purpose only, I initialized the interpreter with its GPU delegate new for every frame (in recognizeImage()) and this way the error disappears. But of course, this is not an option. The interpreter should only be initialized once at the beginning and interpreter.run() has to be called in the same thread.
+
+I read #25657 and I’m trying to make it work. Is it easier with or without SSBO?
+
+impjdi commented on Aug 27, 2019:
+@freedomtan Thanks for the quick response :D
+
+@val9299 It's probably easier with the SSBO. Once you get the correctness right, i.e. when everything works as intended, I would switch to SSBO for better performance. It's up to you though :)
+
+tensorflowbutler removed the stat:awaiting tensorflower label on Aug 27, 2019
+
+val9299 commented on Aug 27, 2019:
+The object detection APP works now with GPU experimental, but I get only 75 ms per frame. Is this normal because it jumps back to CPU for TFLite_Detection_PostProcess or could it be better even without SSBO? I will try SSBO next :)
+
+val9299 closed this as completed on Aug 28, 2019
+
+tensorflow-bot bot commented on Aug 28, 2019:
+Are you satisfied with the resolution of your issue?
+Yes
+No
+
+freedomtan commented on Aug 28, 2019:
+@val9299 I was able to get ~ 45 ms per frame on Pixel 2 using benchmark_model or my dirty benchmark. But that's on rooted device with most system components running at maximum frequencies and model with post processing. As far as I can remember, the TFLite post-processing custom op should take less than 5 ms. That is, it should be possible to get ~ 50 ms per frame.
+
+val9299 commented on Aug 28, 2019:
+@freedomtan Thank you for this nice APP! I get 55 ms for my model with your APP, so I have to find out how to get the same performance with the object detection APP.
+With ssdlite mobilenet I only get 60-65 ms.
+
+And I see this warining while running the APP: E/libEGL: call to OpenGL ES API with no current context (logged once per thread) 
+
+ArtemisZGL commented on Sep 30, 2019:
+@freedomtan Thank you for this nice APP! I get 55 ms for my model with your APP, so I have to find out how to get the same performance with the object detection APP.
+With ssdlite mobilenet I only get 60-65 ms.
+
+And I see this warining while running the APP: E/libEGL: call to OpenGL ES API with no current context (logged once per thread) 
+
+hello, do you know what's the meaning of " E/libEGL: call to OpenGL ES API with no current context" ? and i use gpu delegate, seems the output is not corresponding to without delegate
+
+zychen2016 commented on Oct 30, 2019:
+could you share youre code? @val9299
+
+zychen2016 commented on Oct 30, 2019:
+I also have same error when run using virtual devices pixel2 in AS.
+
+E/libEGL: call to OpenGL ES API with no current context (logged once per thread)
+CUSTOM TFLite_Detection_PostProcess: Operation is not supported.
+   First 114 operations will run on the GPU, and the remaining 1 on the CPU.
+Have anyone have some solutions? @freedomtan @val9299
+
+val9299 commented on Oct 31, 2019:
+@zychen2016:
+Unfortunately the code belongs to a company and I cannot share the research. Furthermore, I'm not working on it anymore and I didn't solve the "E/libEGL" problem.
+
+The "CUSTOM TFLite_Detection_PostProcess: [...]" warning will always stand here when using the TFLite PostProcess (until TFLite supports this operation). If you didn't want this, you couldn't use PostProcess.
+
+zychen2016 commented on Oct 31, 2019:
+@zychen2016:
+Unfortunately the code belongs to a company and I cannot share the research. Furthermore, I'm not working on it anymore and I didn't solve the "E/libEGL" problem.
+
+The "CUSTOM TFLite_Detection_PostProcess: [...]" warning will always stand here when using the TFLite PostProcess (until TFLite supports this operation). If you didn't want this, you couldn't use PostProcess.
+
+Thank you! But could you tell me how to replace TFLite PostProcess with other Op?
+@val9299
+
+zychen2016 commented on Oct 31, 2019:
+@freedomtan
+
+I have run your glDelegateBench in Android Studio using virtual devices Pixel2,But report this error
+
+E/eglCodecCommon: glUtilsParamSize: unknow param 0x000082da
+E/eglCodecCommon: glUtilsParamSize: unknow param 0x000082da
+E/libEGL: call to OpenGL ES API with no current context (logged once per thread)
+E/AndroidRuntime: FATAL EXCEPTION: main
+                  Process: com.mediatek.gldelegatebench, PID: 6701
+                  java.lang.IllegalArgumentException: Internal error: Failed to apply delegate: OpenCL library not loaded - dlopen failed: library "libOpenCL-pixel.so" not found
+                  Falling back to OpenGL
+                  TfLiteGpuDelegate Init: [GL_INVALID_ENUM]: An unacceptable value is specified for an enumerated argument.: glGetBufferParameteri64v in tensorflow/lite/delegates/gpu/gl/gl_buffer.cc:46
+                  TfLiteGpuDelegate Prepare: delegate is not initialized
+                  Node number 31 (TfLiteGpuDelegateV2) failed to prepare.
+And if use Gpu to test , app will flash and be closed.
+
+freedomtan commented on Oct 31, 2019:
+@zychen2016 there are two problems:
+
+'dlopen failed: library "libOpenCL-pixel.so"': this should be fine. Currently GPU Delegate tries first OpenCL and then OpenGL ES Compute Shader. Pixel 2 doesn't have OpenCL binaries. That's why you saw the message.
+I don't know if OpenGL ES Computer Shader is supported in Android SDK emulator. If no, this explains everything. If YES, congratulation, you get a change to improve either the GPU delegate or the emulator.
+
+val9299 mentioned this issue on Nov 6, 2019
+[TensorFlow Lite] GPU delegates on Android with GPU nightly fail to run on GPU (it seems to run on CPU) #31948
+
+mohantym mentioned this issue on Sep 20, 2021
+GPU delegate problems in tensorflow-lite in android studio #52061

@@ -1,0 +1,64 @@
+Title:When trying to convert .pb to tflite
+
+rohaansp97 commented on Jul 12, 2019:
+System information
+
+OS Platform and Distribution (e.g., Linux Ubuntu 16.04): macOS
+Mobile device (e.g. iPhone 8, Pixel 2, Samsung Galaxy) if the issue happens on a mobile device: No
+TensorFlow installed from (source or binary): Command Line
+TensorFlow version: 1.14.0
+Python version: 3.7.3
+Installed using virtualenv? pip? conda?: conda
+Bazel version (if compiling from source): 0.28.0
+GCC/Compiler version (if compiling from source): No
+CUDA/cuDNN version: NO
+GPU model and memory: NO
+/tensorflow/lite/python
+I m using tflite_convert.py from this folder /tensorflow/lite/python.
+I run the code in Command Line as:
+python ./tflite_convert.py --graph_def_file=/Users/deepak/Documents/Tensorflow/workspace/training_demo/trained-inference-graphs/output_inference_graph_v1/frozen_inference_graph.pb --output_file=/Users/deepak/Desktop/TFlite/frozen_inference_graph.tflite --input_format=TENSORFLOW_GRAPHDEF --output_format=TFLITE --input_shape=1,300,300,3 --input_array=Mul—output_array= final_result--inference_type=FLOAT --input_data_type=FLOAT
+
+I get
+
+usage: tflite_convert.py [-h] --output_file OUTPUT_FILE
+(--graph_def_file GRAPH_DEF_FILE | --saved_model_dir SAVED_MODEL_DIR | --keras_model_file KERAS_MODEL_FILE)
+[--output_format {TFLITE,GRAPHVIZ_DOT}]
+[--inference_type {FLOAT,QUANTIZED_UINT8}]
+[--inference_input_type {FLOAT,QUANTIZED_UINT8}]
+[--input_arrays INPUT_ARRAYS]
+[--input_shapes INPUT_SHAPES]
+[--output_arrays OUTPUT_ARRAYS]
+[--saved_model_tag_set SAVED_MODEL_TAG_SET]
+[--saved_model_signature_key SAVED_MODEL_SIGNATURE_KEY]
+[--std_dev_values STD_DEV_VALUES]
+[--mean_values MEAN_VALUES]
+[--default_ranges_min DEFAULT_RANGES_MIN]
+[--default_ranges_max DEFAULT_RANGES_MAX]
+[--post_training_quantize]
+[--drop_control_dependency]
+[--reorder_across_fake_quant]
+[--change_concat_input_ranges {TRUE,FALSE}]
+[--allow_custom_ops] [--target_ops TARGET_OPS]
+[--dump_graphviz_dir DUMP_GRAPHVIZ_DIR]
+[--dump_graphviz_video]
+tflite_convert.py: error: --input_arrays and --output_arrays are required with --graph_def_file
+
+plz, help.
+
+Deepak-HpyAda commented on Jul 12, 2019:
+NO documentation works properly! Searched Complete GOOGLE but left with nothing>>>
+THANK YOU
+
+Deepak-HpyAda commented on Jul 12, 2019:
+Tensorflow you have to reply to this.. As your documents are not understandable.
+And after each code you say. This type of error will be raised. Then whats the use....
+
+ravikyram self-assigned this on Jul 15, 2019
+ravikyram added comp:lite type:support TF 1.14 labels on Jul 15, 2019
+ravikyram assigned liyunlu0618 and unassigned ravikyram on Jul 15, 2019
+
+liyunlu0618 commented on Nov 16, 2019:
+You need to pass the input tensor names and output tensor names. See examples in this blog post:
+https://medium.com/tensorflow/training-and-serving-a-realtime-mobile-object-detector-in-30-minutes-with-cloud-tpus-b78971cf1193
+
+liyunlu0618 closed this as completed on Nov 16, 2019

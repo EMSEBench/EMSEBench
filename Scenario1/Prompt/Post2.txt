@@ -1,0 +1,50 @@
+Title:'Missing required flag: input_file' when using TOCO with SavedModel
+snewi commented on Apr 16, 2018:
+·Have I written custom code (as opposed to using a stock example script ·provided in TensorFlow): NO
+·OS Platform and Distribution (e.g., Linux Ubuntu 16.04): MacOS 10.12.6
+·TensorFlow installed from (source or binary): Binary
+·TensorFlow version (use command below): 1.7
+·Python version: 3.6
+·Bazel version (if compiling from source): n/a
+·GCC/Compiler version (if compiling from source): n/a
+·CUDA/cuDNN version: n/a
+·GPU model and memory: n/a
+·Exact command to reproduce: toco --savedmodel_directory=/Models/Final/1523530083 --output_file=move.tflite
+Describe the problem
+I have a SavedModel trained and I am trying to use TOCO to convert it to tflite format. When I use the above command, given as an example in the docs here I get prompted for the input_format. Specifying this as TENSORFLOW_GRAPHDEF gives a new error for output_format. Specifying this as TFLITE now prompts for required parameter input_file. As this is a SavedModel and not a GraphDef, I can't provide the input_file and in fact, shouldn't have to as savedmodel_directory has already been provided.
+
+The model directory 1523530083 contains saved_model.pb and a variables folder. There are no assets.
+
+tensorflowbutler assigned reedwm on Apr 17, 2018
+reedwm assigned andrehentz and unassigned reedwm on Apr 18, 2018
+reedwm added the comp:tflite label on Apr 18, 2018
+andrehentz assigned gargn and unassigned andrehentz on Apr 26, 2018
+andrehentz added comp:lite and removed comp:tflite labels on Apr 26, 2018
+
+gargn commented on Apr 26, 2018
+The issue is likely that the version of TensorFlow you are using does not have SavedModel support. Try and build with the latest version of TensorFlow.
+
+Instructions are available here: https://www.tensorflow.org/install/install_sources.
+
+tensorflowbutler commented on May 10, 2018：
+Nagging Assignee @gargn: It has been 14 days with no activity and this issue has an assignee. Please update the label and/or status accordingly.
+
+tensorflowbutler commented on May 27, 2018：
+Nagging Assignee @gargn: It has been 30 days with no activity and this issue has an assignee. Please update the label and/or status accordingly.
+
+snewi commented on Jun 6, 2018：
+I've updated to 1.8 and now rather than throwing an exception you get:
+
+TOCO from pip install is currently not working on command line.
+Please use the python TOCO API or use
+
+Closing out issue.
+
+snewi closed this as completed on Jun 6, 2018
+
+kris2677 commented on Oct 4, 2018：
+There was some issue in version 1.8 and it did not install TOCO. After updating to version 1.10 it installed TOCO and also following error got resolved.
+Missing required flag: input_file
+
+jvcodes commented on Nov 2, 2018：
+after updating to tensorflow from 17 to 1.10 (!pip install --upgrade "tensorflow==1.10.*") its resolved my issue

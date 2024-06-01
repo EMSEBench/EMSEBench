@@ -1,0 +1,108 @@
+0样本
+
+Suppose you are a software development engineer.In community-based software development, you need to rely on live-chatting transcripts to discuss emergent bugs/errors you encounter in your daily development tasks.
+
+Now you need to classify the sentences I provide you into:observed behaviors (OB), expected behaviors (EB), steps to reproduce the bug (SR) and others.
+
+tips: "_code_" means code snippet, "_eou_" means the end of a sentence and "_version_" means the version number of a app.
+
+Just give your answer, no explanation required.
+If you understand everything I said, please answer Understand.Then I would send the content of live-chatting transcripts.
+
+1样本
+Suppose you are a software development engineer.In community-based software development, you need to rely on live-chatting transcripts to discuss emergent bugs/errors you encounter in your daily development tasks.
+
+Now you need to classify the sentences I provide you into:observed behaviors (OB), expected behaviors (EB), steps to reproduce the bug (SR) and others.
+
+To help you understand these four categories, I will provide you with an example of each category.
+There are examples.
+"i have added all the required jars in my eclipse project but still i am getting this error. _eou_" observed behaviors (OB)
+"when trying to edit or save desired capabilities, _eou_"   expected behaviors (EB)
+"i have jdk version _version_  _eou_"  steps to reproduce the bug (SR)
+"hi  have a problem with ios 13 device. _eou_"  Others
+
+tips: "_code_" means code snippet, "_eou_" means the end of a sentence and "_version_" means the version number of a app.
+
+Just give your answer, no explanation required.
+If you understand everything I said, please answer Understand.Then I would send the content of live-chatting transcripts.
+
+优化过程
+Suppose you are an expert in the field of large language model (LLM) prompt engineering. Now you are required to help a software development engineer optimize his prompt words so that the large language model can better understand his needs.
+
+His prompt words are as follows.The content of the prompt word is enclosed in brackets:
+
+ChatGPT优化1样本
+Title: Classify Sentences from Software Development Live-Chat Transcripts
+Task Description:
+As a software development engineer, you often rely on live-chat transcripts to discuss and troubleshoot emergent bugs and errors encountered during your development tasks. Your task is to classify the provided sentences from these transcripts into four distinct categories: Observed Behaviors (OB), Expected Behaviors (EB), Steps to Reproduce the Bug (SR), and Other.
+
+Instructions:
+Observed Behaviors (OB): Classify sentences that describe actual behaviors or errors experienced. For example: "I have added all the required jars in my Eclipse project but still I am getting this error. eou"
+Expected Behaviors (EB): Classify sentences that describe the expected or intended behaviors of the software. For example: "When trying to edit or save desired capabilities, eou"
+Steps to Reproduce the Bug (SR): Classify sentences detailing specific steps or conditions needed to replicate the bug. For example: "I have JDK version version eou"
+Other: Classify sentences that do not fit into the above categories or are general queries. For example: "Hi, I have a problem with iOS 13 device. eou"
+
+Notes:
+"code" represents a code snippet.
+"eou" denotes the end of a sentence.
+"version" indicates a software version number.
+
+Response Format:
+Simply classify each sentence without the need for an explanation.
+
+Confirmation:
+If you understand the instructions, please reply with "Understand". Upon confirmation, I will send you the content of the live-chatting transcripts.
+
+
+文心一言优化1样本
+Assume the role of a software development engineer. In a community-based software project, you'll use live chat transcripts to analyze and categorize discussions about bugs and errors encountered during daily development.
+
+Your task is to classify the given sentences into four categories:
+Observed Behaviors (OB): Descriptions of actual behaviors or issues encountered.
+Expected Behaviors (EB): Descriptions of how the software should behave.
+Steps to Reproduce the Bug (SR): Instructions on how to replicate the bug or error.
+Others: Sentences that don't fall into the above categories.
+
+Here are example sentences for each category:
+Observed Behaviors (OB): "I have added all the required jars to my Eclipse project, but I'm still getting this error."
+Expected Behaviors (EB): "When trying to edit or save desired capabilities..."
+Steps to Reproduce the Bug (SR): "I have JDK version version..."
+Others: "Hi, I have a problem with an iOS 13 device."
+
+Note: "code" represents a code snippet, "eou" denotes the end of a sentence, and "version" indicates an app version number.
+
+If you understand the task, simply respond with "Understand." Following this, I will provide you with the live chat transcripts for analysis.
+
+Gemini优化1样本（提供输入时需要去掉Understand）（有删改）
+Assuming the role of a software development engineer working in a community-based development environment, I need your assistance classifying sentences from live-chat transcripts into four categories: Observed Behaviors (OB), Expected Behaviors (EB), Steps to Reproduce (SR), and Others.
+
+Here's a breakdown of each category with examples:
+Observed Behaviors (OB): Describe what actually happened (e.g., "I added all required jars to my Eclipse project, but I'm still getting this error. eou").
+Expected Behaviors (EB): Describe what should have happened (e.g., "When trying to edit or save desired capabilities. eou").
+Steps to Reproduce (SR): List steps to consistently trigger the bug (e.g., "I have JDK version version. eou"). This category often includes placeholders like version numbers.
+Others: Any sentence not fitting the above categories (e.g., "Hi, having a problem with iOS 13 device. eou").
+Please classify the sentences I provide into these categories.
+
+If you understand the task, simply respond with "Understand." Following this, I will provide you with the live chat transcripts for analysis.
+
+智谱清言优化1样本（提供输入时需要去掉Understand）（有删改）
+You are an AI language model trained to assist software development engineers. Your task is to analyze live-chatting transcripts and classify the sentences provided into four categories:
+Observed Behaviors (OB): These are descriptions of what the user is currently experiencing or seeing. It may include error messages, system responses, or any other observable outcomes.
+Expected Behaviors (EB): These are descriptions of what the user believes should be happening. It typically involves actions or outcomes that are not occurring as expected.
+Steps to Reproduce the Bug (SR): These are specific instructions that, when followed, should lead to the observed behavior. They often include versions of software, environments, or configurations.
+Others: This category includes any sentences that do not fall into the above three categories. It could be greetings, non-actionable statements, or off-topic discussions.
+
+To help you understand these categories, here are examples for each:
+OB Example: “I have added all the required jars in my Eclipse project, but still, I am getting this error.” (OB)
+EB Example: “When trying to edit or save desired capabilities,” (EB)
+SR Example: “I have JDK version version.” (SR)
+Others Example: “Hi, have a problem with iOS 13 device.” (Others)
+
+Please note the following conventions used in the sentences:
+“code” denotes a placeholder for a code snippet.
+“eou” denotes the end of a sentence.
+“version” denotes a version number of an application or library.
+Classify the following sentences into the appropriate categories.
+Just give your answer, no explanation required.
+If you understand everything I said, please answer Understand.Then I would send the content of live-chatting transcripts.
+

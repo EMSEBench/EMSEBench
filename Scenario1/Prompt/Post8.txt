@@ -1,0 +1,186 @@
+Title:tflite - Tensorflow lite : Output tensor dimension are not changeable - Adding/removing labels(classes) gives a crash like Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000].
+
+shahid14 commented on Nov 23, 2018:
+Please make sure that this is a bug. As per our GitHub Policy, we only address code/doc bugs, performance issues, feature requests and build/installation issues on GitHub. tag:bug_template
+
+System information
+
+Have I written custom code (as opposed to using a stock example script provided in TensorFlow):
+OS Platform and Distribution (e.g., Linux Ubuntu 16.04):
+Mobile device (e.g. iPhone 8, Pixel 2, Samsung Galaxy) if the issue happens on mobile device:
+TensorFlow installed from (source or binary):
+TensorFlow version (use command below):
+Python version:
+Bazel version (if compiling from source):
+GCC/Compiler version (if compiling from source):
+CUDA/cuDNN version:
+GPU model and memory:
+You can collect some of this information using our environment capture script
+You can also obtain the TensorFlow version with
+python -c "import tensorflow as tf; print(tf.GIT_VERSION, tf.VERSION)"
+
+Describe the current behavior
+
+Describe the expected behavior
+
+Code to reproduce the issue
+Provide a reproducible test case that is the bare minimum necessary to generate the problem.
+
+Other info / logs
+Include any logs or source code that would be helpful to diagnose the problem. If including tracebacks, please include the full traceback. Large logs and files should be attached.
+
+shahid14 commented on Nov 23, 2018:
+Demo is available by Tensorflow in following link :
+https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/java/demo
+
+Please change labels.txt file in above file by adding or removing a text(class) , It'll crash the application.
+It's making the given solution unable to change output's size.
+Please address the solution, how can we change the label.txt file with some constants like INPUT_SIZE or OUTPUT_SIZE that makes this bug solved.
+
+Note
+
+Application works fine as it is, but crash upon changing label.txt file, e.g. adding or removing names in the file.
+
+Crash :
+
+Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000].
+**Above demo is build by using already present gradle configuration setting.
+
+Feature request:
+Changing label file size & work accordingly through parameter is available in IOS demo with this
+output_size = 1000;
+This feature should be in Android version as well.
+
+Thanks.
+
+shahid14 changed the title tflite : output labels file size is fixed, Adding/removing labels(classes) crash : Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. tflite : output labels file size is fixed?? Adding/removing labels(classes) ---> crash : Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. on Nov 26, 2018
+
+shahid14 changed the title tflite : output labels file size is fixed?? Adding/removing labels(classes) ---> crash : Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. tflite : output labels file size is fixed?? \n Adding/removing labels(classes) ---> crash : Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. on Nov 26, 2018
+
+shahid14 changed the title tflite : output labels file size is fixed?? \n Adding/removing labels(classes) ---> crash : Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. tflite : output labels file size is fixed?? Adding/removing labels(classes) ---> crash : Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. on Nov 26, 2018
+
+ymodak added the comp:lite label on Nov 29, 2018
+ymodak assigned angerson on Nov 29, 2018
+angerson assigned jdduke and unassigned angerson on Nov 30, 2018
+
+angerson commented on Nov 30, 2018:
+@jdduke could you reassign this to the right person?
+
+shahid14 commented on Nov 30, 2018:
+Tracking the solution, but not found any yet, please let me know how to address it ! Thanks
+
+shahid14 mentioned this issue on Dec 6, 2018
+tflite can't ResizeInputTensor size #22377
+
+shahid14 changed the title tflite : output labels file size is fixed?? Adding/removing labels(classes) ---> crash : Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. tflite - Tensorflow lite : Output tensor dimension are not changeable - Adding/removing labels(classes) gives a crash like Cannot copy between a TensorFlowLite tensor with shape [1, 1001] and a Java object with shape [1, 1000]. on Dec 6, 2018
+
+shahid14 commented on Dec 7, 2018:
+I think it's not possible to do it, but if it's done on IOS side it should be available in Android as well.
+
+jdduke commented on Dec 8, 2018:
+The labels length needs to match the output tensor length for your trained model. You cannot simply resize your labels file and expect it to work with the same source model; the two are coupled. Of course, you can hardcode an override in your own code if you wish, but that's not generally desirable.
+
+jdduke closed this as completed on Dec 8, 2018
+
+Harshini-Gadige mentioned this issue on Dec 8, 2018
+Cannot convert between a TensorFlowLite buffer with 1072812 bytes and a ByteBuffer with 270000 bytes. #24190
+
+shahid14 commented on Dec 15, 2018:
+The labels length needs to match the output tensor length for your trained model. You cannot simply resize your labels file and expect it to work with the same source model; the two are coupled. Of course, you can hardcode an override in your own code if you wish, but that's not generally desirable.
+
+@jdduke I h'v resolved the problem myself:
+
+Problem :
+
+Cannot copy between a TensorFlowLite tensor with shape ...
+
+Solution :
+
+Changes to TFLiteImageClassifier file in Tensoflow/lite/examples/android are following:
+
+It's great to resize the input tensors, as this functionality is provided by Tensorflow-lite but
+It should be used carefully, Like there would be a lot of problems coming on the way, but you got to look into buffers(imgData) and
+
+Changing labels types to following line.
+
+private List labels = new ArrayList();
+
+Biggest change in TFLiteImageClassifier is:
+
+c.tfLite = new Interpreter(c.loadModelFile(assetManager, modelFilename));
+
+  int[] dimensions = new int[4];
+  dimensions[0] = 1; // Batch_size // No of frames at a time
+  dimensions[1] = 224; // Image Width required by model
+  dimensions[2] = 224; // Image Height required by model
+  dimensions[3] = 3; // No of Pixels
+  Tensor tensor = c.tfLite.getInputTensor(0);
+  c.tfLite.resizeInput(0, dimensions);
+  Tensor tensor1 = c.tfLite.getInputTensor(0);
+Placing above code in TFLiteImageClassifier would resize your input tensors, so your model can take images of any size, pixels or batches.
+
+So even if your model is accepting 150*150 images, or h'v other different parameters, you can make your model accept this size of images, to improve your model accuracy.
+
+Request :
+So far, I h'v came to know that output tensors are also resize-able in IOS demo version, but In case of Android demo version it's not mentioned anywhere in given demo in Tensorflow lite Android version, Hopefully I would find a way to do it as well soon.
+
+Suggestion :
+Tensorflow lite Android version resizing input tensors link were not given anywhere properly or in demo code, took me a little longer to resolve this issue, Please update Read me & code as well.
+
+Thanks All.
+
+shahid14 mentioned this issue on Dec 15, 2018
+Tensorflow Lite demo app with inception-v3/Mobilenet_v1 (float) model crashes #14719
+
+jdduke commented on Dec 18, 2018:
+Thanks for the report, @shahid14. We do have an example which resizes the input tensor, but it's not at all prominent. We'll also be publishing proper API documentation in the coming month, so look out for that as well. Cheers!
+
+shahidgeek mentioned this issue on Feb 12, 2019
+Resize tensor in tflite #16216
+
+rash1994 commented on Aug 30, 2019:
+So far, I h'v came to know that output tensors a
+
+Hie shahid14 ,
+
+Your suggestion looks good.
+I have trained my custom object detector using tensorflow 1.8.0 and 1.13.1.
+I converted the model to tflite using tflite_convert and then trying to deploy in the android project. It is throwing the error "java.lang.IllegalArgumentException: Cannot convert between a TensorFlowLite buffer with 1080000 bytes and a ByteBuffer with 270000 bytes."
+Can you please suggest me something doing which I will be able to build my detector in android.
+
+Thank you
+Rashmi
+
+shahidgeek commented on Aug 30, 2019:
+Hi Rashmi,
+The issue you are facing can be solved by playing with nuts & bolts in your code.
+You can also get help from the following issue:
+#14719
+
+ava.lang.IllegalArgumentException: Cannot convert between a TensorFlowLite buffer with 1080000 bytes and a ByteBuffer with 270000 bytes."
+
+hamlatzis commented on Oct 8, 2019:
+I'm not sure if I have a similar or related problem. I am interested in modifying the batch size and I can resize the input tensors, but when I call to allocate the tensors I get an error message
+
+tensorflow/lite/kernels/reshape.cc:58 num_input_elements != num_output_elements (6 != 30)Node number 228
+
+I am unable to find which operation (built-in or custom) has the batch size as constant
+
+nhnam commented on Oct 11, 2019:
+same problem here !!!!
+
+jdduke commented on Oct 12, 2019:
+@hamlatzis can you file a separate bug for that issue, ideally with a link to your converted model (and/or the source model, including how you converted it)? Thanks.
+
+hamlatzis commented on Oct 15, 2019:
+@jdduke regarding #23940 (comment) I've asked my manager regarding your request and I'm waiting for his reply.
+
+In the mean time I see there is a similar open issue #22377
+
+Also I've found at stackoveflow (https://stackoverflow.com/questions/50735705/tensorflow-litetflite-invoke-error-after-resize-the-input-dimension)
+
+HaFred commented on Oct 27, 2019:
+I solved the same problem by doing as this #22106 (comment)
+
+wingman-jr-addon mentioned this issue on Jul 11, 2020
+Error GantMan/nsfw_model#64

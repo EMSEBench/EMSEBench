@@ -1,0 +1,244 @@
+0样本   以大类正确率为统计对象
+Suppose you are an expert in the field of deep learning (DL) and you are now required to conduct research on the quality issues of JavaScript-based DL systems. Your specific tasks are:
+1. Understand the specific categories of deep learning system failures;
+2. Read the posts I provided you and categorize the faults mentioned in it.
+
+First I will introduce you to the fault categories of deep learning systems:
+Crash(A).This category indicates the functionality of DL systems is terminated unexpectedly with error messages like "undefined" or "uncaught Error".There are five subcategories:
+Reference Error(A.1).Reference Error is the most common crash type, referring to that certain objects (i.e., function, variable, and training argument) are not implemented, defined, or found. 
+Data & Model Error (A.2).The Data & Model Error (A.2) refers to the crashes that data or model is reported to be problematic. 
+Fetch Failure (A.3).Fetch Failure occurs during this process, which refers to crashes with error messages showing the fetch failure, i.e., it cannot directly access the local file system due to the same-origin policy that browsers follow. 
+Browser & Device Error(A.4).Browser & Device Error refers to the crashes showing messages that browsers or devices are problematic.
+Others(A.5).
+
+Poor Performance (B). Poor Performance is another typical symptom for JavaScript-based DL systems, which slow down the execution processes, consume excessive resources, and bring bad user experiences.There are three subcategories:
+Time (B.1).This category covers the performance faults exhibiting high time cost.
+Memory (B.2).This category covers the performance faults which consume RAM/GPU memory abnormally. 
+Others (B.3).Two special types of performance faults, i.e., the Regression and Unstable.Regression refers to the faults occurring after the TensorFlow.js upgradation.Unstable means the inference results of JavaScript-based DL systems are unstable. 
+
+Build & Initialization Failure (C). At the start of developing JavaScript-based DL applications, developers need to build and initialize the necessary environments.Build & Initialization Failure occurred in this process.There are three subcategories.
+TF.js/JS Application Compile Failure(C.1).Faults belong to the building failure when developers compile TensorFlow.js from source code and further compile the DL applications. 
+npm Package Installation Failure(C.2).Developers can install compiled TensorFlow.js via NPM (i.e., the package manager for JavaScript), during which these faults were found.
+Multi-backend Initialization Failure(C.3).JavaScript-based DL systems fail to initialize certain DL backends (e.g., Wasm) even though they have already installed TensorFlow.js successfully.
+
+Incorrect Functionality (D). The kind of faults that can run normally without crashes/failures, but the final results are incorrect.
+Inconsistency between Backends/Platforms/Devices(D.1).JavaScript-based DL systems produce different results under multiple DL backends, platforms, or devices.
+Poor Accuracy(D.2). Models may give wrong inference results under some data. 
+Inf/None/Null Results(D.3). Non-numerical outputs.
+Others(D.4).
+
+Document Error (E).Document Error refers to the faults related to TensorFlow.js official documents/tutorials, including invalid links, incorrect instructions, and missing tutorials.
+
+If you understand the meaning of these categories, reply to Understand and I will send you the post in the form of text.
+Each post consists of three parts:Title,Body and Comment.
+Just answer the category you think is most correct, no explanation is required.
+Output example:Reference Error(A.1)
+
+
+1样本
+Suppose you are an expert in the field of deep learning (DL) and you are now required to conduct research on the quality issues of JavaScript-based DL systems. Your specific tasks are:
+1. Understand the specific categories of deep learning system failures;
+2. Read the posts I provided you and categorize the faults mentioned in it.
+
+First I will introduce you to the fault categories of deep learning systems:
+Crash(A).This category indicates the functionality of DL systems is terminated unexpectedly with error messages like "undefined" or "uncaught Error".There are five subcategories:
+Reference Error(A.1).Reference Error is the most common crash type, referring to that certain objects (i.e., function, variable, and training argument) are not implemented, defined, or found. 
+Data & Model Error (A.2).The Data & Model Error (A.2) refers to the crashes that data or model is reported to be problematic. 
+Fetch Failure (A.3).Fetch Failure occurs during this process, which refers to crashes with error messages showing the fetch failure, i.e., it cannot directly access the local file system due to the same-origin policy that browsers follow. 
+Browser & Device Error(A.4).Browser & Device Error refers to the crashes showing messages that browsers or devices are problematic.
+Others(A.5).
+
+Poor Performance (B). Poor Performance is another typical symptom for JavaScript-based DL systems, which slow down the execution processes, consume excessive resources, and bring bad user experiences.There are three subcategories:
+Time (B.1).This category covers the performance faults exhibiting high time cost.
+Memory (B.2).This category covers the performance faults which consume RAM/GPU memory abnormally. 
+Others (B.3).Two special types of performance faults, i.e., the Regression and Unstable.Regression refers to the faults occurring after the TensorFlow.js upgradation.Unstable means the inference results of JavaScript-based DL systems are unstable. 
+
+Build & Initialization Failure (C). At the start of developing JavaScript-based DL applications, developers need to build and initialize the necessary environments.Build & Initialization Failure occurred in this process.There are three subcategories.
+TF.js/JS Application Compile Failure(C.1).Faults belong to the building failure when developers compile TensorFlow.js from source code and further compile the DL applications. 
+npm Package Installation Failure(C.2).Developers can install compiled TensorFlow.js via NPM (i.e., the package manager for JavaScript), during which these faults were found.
+Multi-backend Initialization Failure(C.3).JavaScript-based DL systems fail to initialize certain DL backends (e.g., Wasm) even though they have already installed TensorFlow.js successfully.
+
+Incorrect Functionality (D). The kind of faults that can run normally without crashes/failures, but the final results are incorrect.
+Inconsistency between Backends/Platforms/Devices(D.1).JavaScript-based DL systems produce different results under multiple DL backends, platforms, or devices.
+Poor Accuracy(D.2). Models may give wrong inference results under some data. 
+Inf/None/Null Results(D.3). Non-numerical outputs.
+Others(D.4).
+
+Document Error (E).Document Error refers to the faults related to TensorFlow.js official documents/tutorials, including invalid links, incorrect instructions, and missing tutorials.
+
+To help you understand these categories more accurately, I will provide you with an example of each category.
+If you understand the meaning of these categories, reply to Understand and I will send you the examples.
+Each post consists of three parts:Title,Body and Comment.
+
+The example of X is as follows.
+If you understand this example, reply Understand.Then I will send you next example.
+
+If you understand all examples, reply Understand.Then I will send you the content of post.
+
+Just answer the category you think is most correct, no explanation is required.
+Output example:Reference Error(A.1)
+
+优化过程
+Suppose you are an expert in the field of large language model (LLM) prompt engineering. Now you need to help an expert in the field of deep learning optimize his prompt words so that the large language model can better understand his needs.His prompt words are as follows:
+
+ChatGPT优化1样本（有删改）
+Task Description:
+You are recognized as an expert in the field of deep learning (DL), specializing in JavaScript-based DL systems. Your current research focus is on identifying and categorizing quality issues within these systems.
+
+Objectives:
+Comprehend Fault Categories: Gain a deep understanding of the different categories of faults that can occur in deep learning systems, specifically those developed with JavaScript.
+Fault Analysis: Analyze the provided posts and categorize the faults mentioned, using the categories detailed below.
+
+Fault Categories Introduction:
+Crash (A): Unexpected terminations with error messages like "undefined" or "uncaught Error". Subcategories include:
+Reference Error (A.1): Issues with non-existent objects like functions, variables, or training arguments.
+Data & Model Error (A.2): Problems with data integrity or model functionality.
+Fetch Failure (A.3): Issues related to data fetching, often due to browser policies.
+Browser & Device Error (A.4): Errors arising from browser or device issues.
+Others (A.5): Miscellaneous crashes.
+
+Poor Performance (B): Performance issues leading to slow execution or excessive resource consumption. Subcategories include:
+Time (B.1): High time costs during operation.
+Memory (B.2): Abnormal RAM/GPU memory consumption.
+Others (B.3): Faults like regression after updates or unstable results.
+
+Build & Initialization Failure (C): Failures in setting up environments or initializing components. Subcategories include:
+TF.js/JS Application Compile Failure (C.1): Compilation failures of TensorFlow.js or related DL applications.
+npm Package Installation Failure (C.2): Issues during TensorFlow.js installation via NPM.
+Multi-backend Initialization Failure (C.3): Problems initializing certain DL backends despite successful TensorFlow.js installation.
+
+Incorrect Functionality (D): The system functions without crashing, but the results are incorrect. Subcategories include:
+Inconsistency (D.1): Variability in results across different backends, platforms, or devices.
+Poor Accuracy (D.2): Incorrect inference results.
+Inf/None/Null Results (D.3): Outputs are non-numerical.
+Others (D.4): Miscellaneous functionality issues.
+
+Document Error (E): Problems related to official TensorFlow.js documentation, such as invalid links or incorrect instructions.
+
+Additional Information:
+Each fault category will be exemplified to aid in your understanding and analysis of the faults.
+If you understand the meaning of these categories, reply to Understand and I will send you the examples.
+Each post consists of three parts:Title,Body and Comment.
+
+The example of X is as follows.
+If you understand this example, reply Understand.Then I will send you next example.
+
+If you understand all examples, reply Understand.Then I will send you the content of post.
+
+Just answer the category you think is most correct, no explanation is required.
+Output example:Reference Error(A.1)
+
+文心一言优化1样本（有删改）
+Prompt:
+Imagine you are a deep learning (DL) expert tasked with investigating the quality issues of JavaScript-based DL systems. Your key objectives are to:
+Comprehend the various types of failures that can occur in DL systems.
+Analyze the provided posts and categorize the described faults according to predefined categories.
+
+To facilitate your understanding, here are the main categories of DL system faults:
+Crash Failures (A):
+Reference Error (A.1): Involves objects (functions, variables, training arguments) not being implemented, defined, or found, resulting in crashes with messages like 'undefined' or 'uncaught Error'.
+Data & Model Error (A.2): Crashes due to problematic data or model issues.
+Fetch Failure (A.3): Crashes related to accessing local file systems due to browser same-origin policies.
+Browser & Device Error (A.4): Crashes indicating browser or device-related issues.
+Others (A.5): Crashes not fitting into the above categories.
+
+Poor Performance Issues (B):
+Time (B.1): Performance faults causing high time costs.
+Memory (B.2): Abnormal RAM/GPU memory consumption.
+Others (B.3): Includes Regression (faults after TensorFlow.js upgrade) and Unstable (unstable inference results).
+
+Build & Initialization Failures (C):
+TF.js/JS Compile Failure (C.1): Issues when compiling TensorFlow.js from source or DL applications.
+npm Package Installation Failure (C.2): Problems installing TensorFlow.js via NPM.
+Multi-backend Initialization Failure (C.3): Failure to initialize DL backends like Wasm after TensorFlow.js installation.
+
+Incorrect Functionality (D):
+Inconsistency (D.1): Different results across backends, platforms, or devices.
+Poor Accuracy (D.2): Models giving incorrect inference results.
+Inf/None/Null Results (D.3): Non-numerical outputs.
+Others (D.4): Other incorrect functionality issues.
+
+Document Error (E): Faults related to TensorFlow.js official documents/tutorials, such as invalid links, incorrect instructions, or missing tutorials.
+
+To aid your understanding, I'll provide examples for each category.
+If you understand the meaning of these categories, reply to Understand and I will send you the examples.
+Each post consists of three parts:Title,Body and Comment.
+
+The example of X is as follows.
+If you understand this example, reply Understand.Then I will send you next example.
+
+If you understand all examples, reply Understand.Then I will send you the content of post.
+
+Just answer the category you think is most correct, no explanation is required.
+Output example:Reference Error(A.1)
+
+
+Gemini优化1样本（有删改）（更改主语宾语）(无解释）
+You can help me categorize faults in JavaScript-based deep learning systems based on the TensorFlow.js framework.  For each fault description I provide, you should try your best to identify the most likely category (A-E)  from the following list:
+
+Crash (A): Unexpected termination with error messages.
+Poor Performance (B): Slow execution, high resource consumption.
+Build & Initialization Failure (C): Issues during setup and environment building.
+Incorrect Functionality (D): System runs but produces incorrect results.
+Document Error (E): Errors in TensorFlow.js documentation or tutorials.
+
+To aid your understanding, I'll provide examples for each category.
+If you understand the meaning of these categories, reply to Understand and I will send you the examples.
+Each post consists of three parts:Title,Body and Comment.
+
+The example of X is as follows.
+If you understand this example, reply Understand.Then I will send you next example.
+
+If you understand all examples, reply Understand.Then I will send you the content of post.
+
+Just answer the category you think is most correct, no explanation is required.
+Output example:Crash(A)
+
+
+智谱清言优化1样本（有删改）
+**Objective**: As a deep learning (DL) expert, your task is to analyze the quality issues in JavaScript-based DL systems and categorize them according to the provided fault categories.
+**Task Overview**:
+1. Familiarize yourself with the defined categories of DL system failures.
+2. Review the provided posts and accurately classify the described faults.
+**Fault Categories:**
+- **Crash (A):** DL system termination with error messages.
+  - *Reference Error (A.1):* Missing or undefined objects.
+  - *Data & Model Error (A.2):* Issues with data or model integrity.
+  - *Fetch Failure (A.3):* Local file access issues due to same-origin policy.
+  - *Browser & Device Error (A.4):* Errors indicating browser/device issues.
+  - *Others (A.5):* Unclassified crash errors.
+- **Poor Performance (B):** System slowdowns and excessive resource usage.
+  - *Time (B.1):* Excessive execution time.
+  - *Memory (B.2):* High memory consumption.
+  - *Others (B.3):* Regression after updates; unstable inference.
+- **Build & Initialization Failure (C):** Issues during setup and initialization.
+  - *TF.js/JS Application Compile Failure (C.1):* Compilation errors.
+  - *npm Package Installation Failure (C.2):* Package manager errors.
+  - *Multi-backend Initialization Failure (C.3):* Backend setup failures.
+- **Incorrect Functionality (D):** System runs but produces incorrect results.
+  - *Inconsistency between Backends/Platforms/Devices (D.1):* Varied results across environments.
+  - *Poor Accuracy (D.2):* Incorrect model inferences.
+  - *Inf/None/Null Results (D.3):* Non-numeric outputs.
+  - *Others (D.4):* Unclassified incorrect functionality.
+- **Document Error (E):** Issues with TensorFlow.js documentation.
+  - *Invalid links, incorrect instructions, missing tutorials.*
+**Instructions:**
+1. Study the fault categories and understand the nuances between them.
+2. Analyze the provided examples, each corresponding to one of the fault categories.
+3. Classify the faults from the posts, ensuring each is placed in the correct subcategory.
+**Example:**
+_Post Extract:_ "After updating to the latest version of TensorFlow.js, our model's inference time doubled, even with minor changes in code."
+_Categorization:_ Poor Performance > Time (B.1)
+
+If you understand the meaning of these categories, reply to Understand and I will send you the examples.
+Each post consists of three parts:Title,Body and Comment.
+
+The example of X is as follows.
+If you understand this example, reply Understand.Then I will send you next example.
+
+If you understand all examples, reply Understand.Then I will send you the content of post.
+
+Just answer the category you think is most correct, no explanation is required.
+Output example:Reference Error(A.1)
+
+

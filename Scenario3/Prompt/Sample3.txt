@@ -1,0 +1,50 @@
+Title:Agent type system relies on the fact that uint32_t is identical to unsigned int #556
+k2nsloos commented on Jul 9, 2018:
+"Agent type system relies on the fact that uint32_t is identical to unsigned int. On the system I'm trying to compile it for they are of similar size. The compiler doesn't like it though, as it feels the types are not the same, and compilation fails.
+
+[ 87%] Building C object serializer/CMakeFiles/serializer.dir/src/agenttypesystem.c.obj
+C:/Users/jaap.hollander/Documents/MCUXpressoIDE_10.1.1_606/workspace/IotHub/azure-iot-sdk-c/serializer/src/agenttypesystem.c: In function 'CreateAgentDataType_From_String':
+C:/Users/jaap.hollander/Documents/MCUXpressoIDE_10.1.1_606/workspace/IotHub/azure-iot-sdk-c/serializer/src/agenttypesystem.c:3300:35: error: passing argument 2 of 'sscanfu' from incompatible pointer type [-Werror=incompatible-pointer-types]
+                 if ((sscanfu(pos, &uint32Value) != 1) ||
+                                   ^
+C:/Users/jaap.hollander/Documents/MCUXpressoIDE_10.1.1_606/workspace/IotHub/azure-iot-sdk-c/serializer/src/agenttypesystem.c:3065:12: note: expected 'unsigned int *' but argument is of type 'uint32_t * {aka long unsigned int *}'
+ static int sscanfu(const char* src, unsigned int* dst)
+            ^~~~~~~
+cc1.exe: all warnings being treated as errors"
+
+ewertons self-assigned this on Jul 9, 2018
+ewertons added bug investigation-required labels on Jul 9, 2018
+
+ewertons commented on Jul 9, 2018:
+"Hi @k2nsloos ,
+what is the platform you are building for? (OS, compiler and versions?)
+Also, what is the version of the SDK you are trying to compile?"
+
+k2nsloos commented on Jul 10, 2018:
+"hi @ewertons,
+
+I'm compiling for cortex-m3 / armv7-m
+
+arm-none-eabi-gcc.exe (GNU Tools for ARM Embedded Processors 6-2017-q2-update) 6.3.1 20170620 (release) [ARM/embedded-6-branch revision 249437]
+
+Not running any os, using a custom port"
+
+ewertons added investigation-required and removed investigation-required labels on Jul 11, 2018
+ewertons added a commit that referenced this issue on Jul 11, 2018
+Make explicit cast on agenttypesystem.c (Serializer) (github issue #556)
+
+ewertons added a commit that referenced this issue on Jul 11, 2018
+Make explicit cast on agenttypesystem.c (Serializer) (github issue #556… …
+c3e18bc
+…) - better fix
+
+ewertons commented on Jul 11, 2018:
+"Hi @k2nsloos ,
+a fix was just checked into master branch to explicitly cast the value.
+Could please you verify it addresses the failure you experienced?"
+
+ewertons removed the investigation-required label on Jul 11, 2018
+k2nsloos commented on Jul 12, 2018:
+"Builds without errors :)"
+
+k2nsloos closed this as completed on Jul 12, 2018

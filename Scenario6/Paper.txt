@@ -1,0 +1,3 @@
+Li, J. and Ahmed, I., 2023, May. Commit message matters: Investigating impact and evolution of commit message quality. In 2023 IEEE/ACM 45th International Conference on Software Engineering (ICSE) (pp. 806-817). IEEE.
+
+https://ieeexplore.ieee.org/abstract/document/10172825

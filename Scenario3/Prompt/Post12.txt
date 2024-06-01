@@ -1,0 +1,9 @@
+Title:Fix: missing war file in config/tomcat directory #44
+harishanand95 commented on Mar 7, 2018:
+"The new war file was placed in config directory instead of config/tomcat directory."
+Fix: missing war file in config/tomcat directory 
+ced9eca
+Signed-off-by: Harish Anand <harishanand95@gmail.com>
+harishanand95 added the bug label on Mar 7, 2018
+harishanand95 merged commit f9c1b91 into rbccps-iisc:master on Mar 7, 2018
+harishanand95 deleted the fix-missing-reg-war branch 6 years ago

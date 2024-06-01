@@ -1,0 +1,35 @@
+Title:Wash has completed automation triggers on boot #2
+Norien commented on Apr 27, 2017:
+"sometimes TTS and Notify both trigger that the wash is completed after a restart."
+
+Norien added the bug label on Apr 27, 2017
+Norien commented on May 1, 2017:
+"Automation determined wash was done and shut switch off however wash was not completed 12 mins had remained.
+
+Maybe add a condition for the value to stay for 3 mins"
+
+Norien commented on May 2, 2017:
+"Added a condition to only trigger if the state stays 4.2 for 3 mins"
+
+Norien commented on May 2, 2017:
+"http://philhawthorne.com/making-dumb-dishwashers-and-washing-machines-smart-alerts-when-the-dishes-and-clothes-are-cleaned/"
+
+Norien added a commit that referenced this issue on May 2, 2017
+@Norien
+Fix for #2 …
+b752565
+added time condition turned off the auto shutoff for now
+
+Norien closed this as completed on May 2, 2017
+
+Norien commented on May 7, 2017:"Did not receive notifications"
+Norien reopened this on May 7, 2017
+Norien added a commit that referenced this issue on May 9, 2017
+@Norien
+MQTT doorbell, fix for washer #2 …
+d21d4d1
+also switched using my version as a trigger vs updater.updater
+
+Norien commented on May 9, 2017:
+"once again closed. added a sensor template for running and off. using that for conditions"
+Norien closed this as completed on May 9, 2017

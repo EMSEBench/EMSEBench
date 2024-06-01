@@ -1,0 +1,3 @@
+我们通过随机数生成器生成了55个样本编号，仍无标签为“1”的样本。因此，我们挑选了数据库表格中的第一个标签为“1”的数据作为样本。
+
+We generated 55 sample numbers using a random number generator, but still found no samples labeled "1". Therefore, we selected the first data entry labeled "1" from the database table as the sample.

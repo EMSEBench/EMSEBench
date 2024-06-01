@@ -1,0 +1,182 @@
+Title:Feature/arduino compatibility regression #1283
+
+m-mcgowan commented on Mar 28, 2017:
+"Attempts to restore 0.6.0-style arduino compatibility as outlined by issue #1278
+
+In a nutshell:
+
+the default is 0.6.0 Arduino compatibility - let's call this partial compatibility.
+applications and libraries include "Arduino.h" to define ARDUINO and bring in many more additional defines to complete the Arduino API. We'll call this full compatibility.
+
+Mixing libraries that require partial and full Arduino compatibility:
+Libraries that require full Arduino compatibility may include Arduino.h in their library header file, while libraries that depend on partial compatibility (because they themselves define missing symbols) don't include Arduino.h. If a library requiring partial compatibility is included after one requiring full compatibility then the partial compatibility library may break, since Arduino symbols that it's not expecting will be defined.
+
+The workaround for this is to include all libraries requiring partial compatibility before libraries requiring full compatibility in the application file.
+
+Doneness:
+
+ Contributor has signed CLA
+ Problem and Solution clearly stated
+ Code peer reviewed
+ API tests compiled
+ Run unit/integration/application tests on device
+ Add documentation
+ Add to CHANGELOG.md after merging (add links to docs and issues)
+ENHANCEMENT / BUG FIX
+[PR #1283] [Implements #1278] Restores 0.6.0-style Arduino compatibility by default, full Arduino compatibility when including Arduino.h"
+
+m-mcgowan commented on Mar 28, 2017:
+"Internal Design
+The partial Arduino API as it was in 0.6.0 is defined in spark_wiring_arduino.h. This file has been restored to it's former 0.6.0 state without the new Arduino APIs. This file is always included with Particle.h/application.h.
+
+The full Arduino API is declared in "Arduino.h". By keeping it separate we make a clear distinction between which symbols are included in the partial API and the full API.
+
+There is some overlap of the partial API and the full API - constrain and range are examples. In the partial API, these are declared as templates. In the full API, they are macros. Hence, the usual trick of using #ifndef constrain won't work in the full API since it's defined as a template and not a macro. The workaround is to use PARTICLE_WIRING_ARDUINO_TEMPLATE as a define when these few common symbols have already been defined in the partial API, so they are not re-defined in the full API. If we are splitting hairs, this may mean that some arduino libraries fail to compile in cases where the template does not behave the same as the macro (or that they are relying upon double-evaluation side-effects of the macro!!). In this rare (hopefully non-existent) case, it is possible to get the arduino version of these defines, by disabling the preprocessor, and including Arduino.h at the top of the sketch."
+
+technobly requested changes on Mar 30, 2017
+technobly left a comment:
+"should this be #if PARTICLE_WIRING_ARDUINO_COMPATIBILITY == 1 just in case PARTICLE_WIRING_ARDUINO_COMPATIBILITY is defined as 0 by the user for some reason? Not even sure if that's a valid use case, but from Arduino.h it seems like it's supported."
+
+monkbroc commented on Mar 30, 2017:
+"Did you check what happens when multiple include files are included? Are the Arduino symbols defined "as expected"?
+
+For example:
+
+#include "some_library.h"
+#include "Arduino.h"
+and some_library.h includes Particle.h.
+
+Or
+
+#include "library1.h" // includes "Particle.h"
+#include "library2.h" // includes "Arduino.h"
+It can get hairy with symbol redefinitions in libraries so it would be fine if some cases don't work, but it would be nice if the easy case (both Arduino.h and Particle.h included, libraries don't redefine Arduino symbols) works."
+
+avtolstoy reviewed on Apr 3, 2017:
+"wiring/inc/spark_wiring_spi.h
+Outdated
+@@ -137,7 +137,7 @@ class SPISettings : public Printable {
+}
+
+#ifdef PARTICLE_WIRING_ARDUINO_COMPATIBILITY
+typedef particle::SPISettings SPISettings;
+typedef particle::__SPISettings __SPISettings;"
+
+avtolstoy on Apr 3, 2017:"Should this be typedef particle::__SPISettings SPISettings?"
+
+m-mcgowan on Apr 3, 2017:"yes...good catch. I had the IDE do the renaming..."
+
+m-mcgowan force-pushed the feature/arduino_compatibility_regression branch from 780000e to a4229e1
+
+m-mcgowan added 13 commits 7 years ago
+@m-mcgowan
+@technobly
+re-instate 0.6.0 arduino constants. moves the new 0.6.1 arduino defin… 
+e9507e8
+@m-mcgowan
+@technobly
+remove PARTICLE_NO_ARDUINO_COMPATIBILITY. The alternative is to inc… 
+8ed1df0
+…lude `Arduino.h` in your project.
+@m-mcgowan
+@technobly
+makes pgmspace defines conditional to avoid duplicate definitions
+c67b3d3
+@m-mcgowan
+@technobly
+adds demarkation for functions already defined by particle as templat… 
+40264bc
+…es so they are not redefined as macros later. If we are splitting hairs, this could be a potential compatibility issue when porting Arduino libraries, in cases where the macro behaves differently from the template, since our version is included by the particle preprocessor for .ino files. The workaround is to disable the preprocessor and then include “Arduino.h” to get the arduino macros rather than the particle templates. I mention this only as a possibility and hope it is seldom needed in practice.
+@m-mcgowan
+@technobly
+removes documentation for arduino compatibility switch
+c57c10c
+@m-mcgowan
+@technobly
+PARTICLE_ARDUINO_COMPATIBILTY -> PARTICLE_WIRING_ARDUINO_COMPATIBILTY
+52b4f34
+@m-mcgowan
+@technobly
+when the full arduino API is used, the few progmem related symbols fr… 
+fa3e755
+…om the partial API are undefined.
+@m-mcgowan
+@technobly
+ensures that SPISettings (a new Arduino API) is only available when A… 
+b860e10
+…rduino.h is included to prevent clashes with libraries that define this.
+@m-mcgowan
+@technobly
+remove “active_object.h” from application headers since this stops th… 
+5f1bfcd
+…e C functions `isnan`, `isinf` from being available.
+@m-mcgowan
+@technobly
+ensure the ISR queue is available to non-threading platforms too
+47289ed
+@m-mcgowan
+@technobly
+rename SPISettings because it’s ambiguous.
+6331ec6
+@m-mcgowan
+@technobly
+fix IDE rename typo
+48a841e
+@m-mcgowan
+@technobly
+makes the arduino compatibility symbols always defined. Adds a test f… 
+1292314
+…or SPISettings API and arduino dependency.
+
+technobly force-pushed the feature/arduino_compatibility_regression branch from a4229e1 to 1292314 
+technobly added enhancement bug labels on Apr 4, 2017
+technobly previously approved these changes on Apr 4, 2017
+technobly commented on Apr 4, 2017:"Github can't tell if the changes I requested were implemented... but I think they were?"
+
+update CHANGELOG.md (v0.6.2-rc.1) [ci skip]
+technobly dismissed their stale review 7 years ago:"force push kind of ruined the review linking -_-"
+m-mcgowan added 3 commits 7 years ago
+@m-mcgowan
+missing change - sourcetree doesn’t always fully refresh the workspac… 
+d0ab86f
+…e view
+@m-mcgowan
+allow Arduino.h to be included after Particle.h. ensure min/max/const… 
+35d1f41
+…rain/round are not rredefined. adds more tests
+@m-mcgowan
+adds support for __FlashStringHelper in the String class.
+ad5a10c
+@technobly technobly added this to the 0.6.2 milestone on Apr 5, 2017
+@m-mcgowan
+adds Wire.setClock() for arduino compatibility
+5830bf5
+m-mcgowan added 3 commits 7 years ago
+@m-mcgowan
+adds a stub for SPI.usingInterrupt() for arduino compatibility
+040b516
+@m-mcgowan
+bool Serial test
+4643b43
+@m-mcgowan
+adds tests for other public arduino APIs
+c3fe44e
+@m-mcgowan m-mcgowan changed the base branch from develop to release/v0.6.2-rc.1 7 years ago
+
+m-mcgowan commented on Apr 5, 2017:
+"Once the arduino header is included, the symbols remain visible until the end of the compilation unit (and for all subsequent headers.)
+
+For example, in this case
+
+#include "libraryExpecting062ArduinoSymbols.h"  // library 1
+#include "libraryExpecting060Symbols.h"  // library 2
+The second library is not expecting the arduino symbols to be defined (e.g. it might declare it's own copy of SPISettings) but these symbols are defined if library 1 includes Arduino.h in its header. To work around this, includes should be done in libraries an applications in a way thats all the headers not expecting arduino support first, and then all arduino-dependent headers afterwards.
+
+In the example above, reversing the order of the headers would fix the problem."
+
+m-mcgowan merged commit 724c359 into release/v0.6.2-rc.1 on Apr 5, 2017
+technobly reviewed on Apr 5, 2017:"technobly left a comment
+Looks good!"
+
+m-mcgowan deleted the feature/arduino_compatibility_regression branch 7 years ago
+

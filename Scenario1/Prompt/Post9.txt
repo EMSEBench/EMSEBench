@@ -1,0 +1,176 @@
+Title:.tflite model (converted from keras .h5 model) always predicts the same class with same probability
+
+Question:
+I've trained a model (using keras) to count number of fingers held up. The model works really well (~99% accuracy on test images). Now, I'm trying to deploy this model on the edge by converting the saved model (.h5 file) to a .tflite file.
+
+Using tf.lite.TFLiteConverter.from_keras_model_file(), it converts and gives me a .tflite file with this error:
+
+tensorflow/core/grappler/grappler_item_builder.cc:637] Init node conv2d/kernel/Assign doesn't exist in graph
+When I load this tflite file and try to make predictions on the same input images, it always predicts 'ZERO' which is the first class and with probability = 0.003922. The rest of the classes are always 0.00 I get the same results when loading my tflite model in the Android Image classification example app from Tensorflow repo's.
+
+Why does this tflite model not work as expected? Am I missing something during the conversion or using operations that aren't supported in TFlite? Please help!
+
+So far, I've tried doing the conversions on different versions of Tensorflow;
+- 1.12
+- 1.14
+- tf-nightly-gpu 1.14
+
+All give the same results.
+
+My .h5 model and a test image, if you would like to try it yourself!
+
+This is the code I used to convert the model:
+
+import tensorflow as tf
+
+converter = tf.lite.TFLiteConverter.from_keras_model_file("fingers_latest.h5")
+tflite_model = converter.convert()
+open("fingers_latest.tflite", "wb").write(tflite_model)
+My keras model:
+
+nbatch = 64
+IMG_SIZE = 256
+
+
+def load_data():
+    print("Batch size = ", nbatch, "\n")
+
+    train_datagen = ImageDataGenerator(rescale=1. / 255, rotation_range=12., width_shift_range=0.2,
+                                       height_shift_range=0.2,
+                                       zoom_range=0.15, shear_range=0.2, horizontal_flip=False)
+
+    test_datagen = ImageDataGenerator(rescale=1. / 255)
+
+    train_gen = train_datagen.flow_from_directory('./datasets/fingers_white/train/', target_size=(IMG_SIZE, IMG_SIZE),
+                                                  color_mode='rgb',
+                                                  batch_size=nbatch, shuffle=True,
+                                                  classes=['ZERO', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE'],
+                                                  class_mode='categorical')
+
+    test_gen = test_datagen.flow_from_directory('./datasets/fingers_white/test/', target_size=(IMG_SIZE, IMG_SIZE),
+                                                color_mode='rgb',
+                                                batch_size=nbatch,
+                                                classes=['ZERO', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE'],
+                                                class_mode='categorical')
+
+    return train_gen, test_gen
+
+
+def train_model(train_gen, test_gen):
+    model = Sequential()
+    model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(IMG_SIZE, IMG_SIZE, 3)))
+    model.add(Dropout(0.2))
+    model.add(MaxPooling2D((3, 3)))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(Dropout(0.4))
+    model.add(MaxPooling2D((3, 3)))
+    model.add(Conv2D(128, (3, 3), activation='relu'))
+    model.add(Dropout(0.6))
+    model.add(MaxPooling2D((3, 3)))
+    model.add(Conv2D(32, (3, 3), activation='relu'))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(6, activation='softmax'))
+
+    model.summary()
+
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
+
+    STEP_SIZE_TRAIN = train_gen.n // train_gen.batch_size
+    STEP_SIZE_TEST = test_gen.n // test_gen.batch_size
+    print(STEP_SIZE_TEST, STEP_SIZE_TRAIN)
+
+    model.fit_generator(train_gen, steps_per_epoch=STEP_SIZE_TRAIN, epochs=5, validation_data=test_gen,
+                        validation_steps=STEP_SIZE_TEST, use_multiprocessing=True, workers=6)
+The code I use to load and run the .tflite model:
+
+import tensorflow as tf
+import tkinter as tk
+from tkinter import filedialog
+import PIL
+from PIL import Image
+import numpy as np
+import time
+
+# DEF. PARAMETERS
+img_row, img_column = 224, 224
+num_channel = 3
+num_batch = 1
+input_mean = 127.5
+input_std = 127.5
+floating_model = False
+
+path_1 = r"./models/mobilenet_v2_1.0_224.tflite"
+labels_path = "./models/labels_mobilenet.txt"
+
+def load_labels(filename):
+    my_labels = []
+    input_file = open(filename, 'r')
+    for l in input_file:
+        my_labels.append(l.strip())
+    return my_labels
+
+interpreter = tf.lite.Interpreter(path_1)
+interpreter.allocate_tensors()
+
+# obtaining the input-output shapes and types
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+print(input_details, '\n', output_details)
+
+# file selection window for input selection
+root = tk.Tk()
+root.withdraw()
+file_path = filedialog.askopenfilename()
+input_img = Image.open(file_path)
+input_img = input_img.resize((img_row, img_column))
+input_img = np.expand_dims(input_img, axis=0)
+
+input_img = (np.float32(input_img) - input_mean) / input_std
+
+interpreter.set_tensor(input_details[0]['index'], input_img)
+
+# running inference
+interpreter.invoke()
+
+output_data = interpreter.get_tensor(output_details[0]['index'])
+results = np.squeeze(output_data)
+
+top_k = results.argsort()[-5:][::-1]
+labels = load_labels(labels_path)
+for i in top_k:
+    print('{0:08.6f}'.format(float(results[i] / 255.0)) + ":", labels[i])
+
+
+Show how you use it since that's where it goes wrong. – 
+Yolo Swaggins
+ Jun 26, 2019 at 2:23
+@YoloSwaggins I have added the code I use to load and test my .tflite models, please have a look! I've tried running the model on Android as well (using the example app from Tensorflow repo's) and it does the same thing.. – 
+Pratheek Balakrishna
+ Jun 26, 2019 at 19:37 
+It's possible that the scale of the input is wrong, try not normalizing by input_mean and input_std, but keeping the image in [0,256). I believe tflite should do this automatically in the input node. To know for sure, please add the graphviz output of the converter. – 
+Yolo Swaggins
+ Jun 27, 2019 at 0:55
+@YoloSwaggins OK i tried doing this, the results are the same! – 
+Pratheek Balakrishna
+ Jun 27, 2019 at 7:51
+@YoloSwaggins I get this error when converting the .h5 model to tflite - tensorflow/core/grappler/grappler_item_builder.cc:637] Init node conv2d/kernel/Assign doesn't exist in graph I've updated the question – 
+Pratheek Balakrishna
+ Jun 27, 2019 at 8:49 
+
+Answer:
+In your training code, you normalize the images to the range [0..1], which is specified by the following lines:
+
+train_datagen = ImageDataGenerator(rescale=1. / 255, ...)
+test_datagen = ImageDataGenerator(rescale=1. / 255)
+The input range of the converted tflite model, however, is [-1..1], which is specified by the following lines:
+
+input_mean = 127.5
+input_std = 127.5
+input_img = (np.float32(input_img) - input_mean) / input_std
+So, you can try to replace the above lines with:
+
+input_mean = 0.
+input_std = 255.

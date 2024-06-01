@@ -1,0 +1,27 @@
+TItle:VirtualDevice #15
+VladimirAkopyan commented on Sep 15, 2017:
+"In many cases, users will download the app and have no idea what it does. They may also have no actual hardware to test the system with.
+The app needs to provide a way to simulate a device and readings, so that users can appreciate the UI and the app functionality."
+
+VladimirAkopyan added a commit that referenced this issue on Sep 15, 2017
+@VladimirAkopyan
+Added "VirtualDeviceEnabled" setting. #15
+
+VladimirAkopyan added Feature in progress labels on Sep 15, 2017
+VladimirAkopyan added this to the 1.6.5 milestone on Sep 18, 2017
+VladimirAkopyan mentioned this issue on Sep 18, 2017
+Making data avaliable publically #9
+VladimirAkopyan added this to Planned in Release to store on Sep 20, 2017
+VladimirAkopyan modified the milestones: 1.7, 1.8 on Sep 29, 2017
+
+VladimirAkopyan commented on Sep 29, 2017:
+"I consider this not so important after we implemented ESP8266, which is an awesome and easy to test device.
+Postponed./"
+
+VladimirAkopyan modified the milestones: 1.8, 1.7 on Oct 2, 2017
+VladimirAkopyan commented on Oct 2, 2017:
+"moved forward because it's necessary for my own testing.
+I have added a MachineID to Settings, it's a Guid that's generated and displayed in settings. When a virtual device is created it will have LocalID equal to the machineID. THat means that this app installation will produce, and continue to produce readings for / from the same device. And that helps."
+
+VladimirAkopyan closed this as completed in 9b55b74 on Oct 2, 2017
+VladimirAkopyan moved this from Planned to Done in Release to store on Oct 6, 2017

@@ -1,0 +1,29 @@
+Title:keras custom loss convert to coreml
+JACKYLUO1991 commented on Jun 27, 2018
+I use
+def matting_loss(x):
+
+def loss(y_true, y_pred):
+
+    La = dice_coef_loss(y_true, y_pred)
+
+    mul_true = K.concatenate([y_true, y_true, y_true], axis=-1) * x
+
+    mul_pred = K.concatenate([y_pred, y_pred, y_pred], axis=-1) * x
+
+    Lcolor = K.mean(K.sqrt(K.square(mul_true - mul_pred) + K.epsilon()))
+
+    return La + 0.5 * Lcolor
+
+return loss
+in keras, but cannot convet it to coreml, anyone who can help me!!!
+
+aseemw commented on Jul 7, 2018
+Since CoreML is only for inference there is no concept of loss functions.
+Why do you need a loss function for inference?
+
+aseemw closed this as completed on Jul 7, 2018
+
+Birch-san pushed a commit to Birch-san/coremltools that referenced this issue on Nov 27, 2022
+
+Add is_torch_available, is_flax_available (apple#204)

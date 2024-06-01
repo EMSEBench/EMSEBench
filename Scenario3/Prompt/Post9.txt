@@ -1,0 +1,242 @@
+Title:[v1] Broker_Publish Problem when Signal occurs #474
+suniltop commented on Jan 15, 2018:
+"Hi,
+is there any example uart or timer with using signal on linux ?
+Broker_Publish doesnt work when signal is occurs from uart"
+
+aribeironovaes commented on Jan 17, 2018:
+"HI @suniltop ,
+
+Unfortunately we don't have an example. We would need more information to check what is going on?
+One thing you could do it to write an example and push a contribution?
+
+Let us know,
+
+ANgelo Ribeiro."
+
+suniltop commented on Jan 20, 2018:
+"sourcecode.zip
+Hi angelo,
+I prepared a example for this problem
+i got a two module with broker that are transmitter and receiver.
+
+Transmitter module has a thread and send a message to receiver per every second.
+Message contain is a second value that is increase from timer signal handler (1ms) with prescaler(1000)
+When receiver module receive a message, will printing to console
+
+Problem has been occurs randomly and then receiver module dont receive a message
+
+I give an console log below
+
+linaro@tinkerboard:~/remote-debugging$ ./iotbroker iotbroker.json
+gateway successfully created from JSON
+gateway shall run until ENTER is pressed
+Blocking signal 34
+Timer ID is 0xb40004d0
+Unblocking Signal 34
+transmitter Module Timer Configured...
+transmitter: Send Message - {Second: 0}
+receiver: message received
+message: {Second: 0}
+transmitter: Send Message - {Second: 0}
+receiver: message received
+message: {Second: 0}
+transmitter: Send Message - {Second: 1}
+receiver: message received
+message: {Second: 1}
+transmitter: Send Message - {Second: 2}
+receiver: message received
+message: {Second: 2}
+transmitter: Send Message - {Second: 3}
+receiver: message received
+message: {Second: 3}
+transmitter: Send Message - {Second: 4}
+receiver: message received
+message: {Second: 4}
+transmitter: Send Message - {Second: 5}
+receiver: message received
+message: {Second: 5}
+transmitter: Send Message - {Second: 6}
+receiver: message received
+message: {Second: 6}
+transmitter: Send Message - {Second: 7}
+transmitter: Send Message - {Second: 8}
+transmitter: Send Message - {Second: 9}
+transmitter: Send Message - {Second: 10}
+transmitter: Send Message - {Second: 11}
+
+Best Regards"
+
+damonbarry changed the title Broker_Publish Problem when Signal occurs [v1] Broker_Publish Problem when Signal occurs on Jan 23, 2018
+
+damonbarry commented on Jan 27, 2018:
+"In your comment, I see that the receiver: message received messages stop, but the transmitter: Send Message ... messages continue.
+
+Are you printing the transmitter message right next to the Broker_Publish() call (either right before or right after)? Or are you printing it earlier in the loop?
+
+I just want to understand whether your transmitter module is actually sending the message vs simply printing that it sent the message when it really didn't. Does Broker_Publish return an error?"
+
+suniltop commented on Jan 28, 2018:
+"Hi damonbarry,
+
+Module is writing transmitter message log just before calling Broker_Publish
+
+Also i have added transmitter module code that writing return code of broker_publish.
+
+Broker_Publish returns always 0. This means that there is no error i guess
+
+UPDATE: i have just made a test on X64 UbuntuOS :( Same result.
+In addition main system is armv7l and tinkerOS (debian based)
+
+linaro@tinkerboard:~/test$ ./iotbroker iotbroker.json
+gateway successfully created from JSON
+gateway shall run until ENTER is pressed
+Blocking signal 34
+Timer ID is 0xb40004d0
+Unblocking Signal 34
+transmitter Module Timer Configured...
+transmitter: Send Message - {Second: 0}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 0}
+
+transmitter: Send Message - {Second: 1}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 1}
+
+transmitter: Send Message - {Second: 2}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 2}
+
+transmitter: Send Message - {Second: 3}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 3}
+
+transmitter: Send Message - {Second: 4}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 4}
+
+transmitter: Send Message - {Second: 4}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 4}
+
+transmitter: Send Message - {Second: 5}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 5}
+
+transmitter: Send Message - {Second: 6}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 6}
+
+transmitter: Send Message - {Second: 7}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 7}
+
+transmitter: Send Message - {Second: 8}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 8}
+
+transmitter: Send Message - {Second: 9}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 9}
+
+transmitter: Send Message - {Second: 10}
+transmitter: Broker_Publish() Return Code = 0
+receiver: message received
+message: {Second: 10}�
+
+transmitter: Send Message - {Second: 11}
+transmitter: Broker_Publish() Return Code = 0
+
+transmitter: Send Message - {Second: 12}
+transmitter: Broker_Publish() Return Code = 0
+
+transmitter: Send Message - {Second: 12}
+transmitter: Broker_Publish() Return Code = 0
+
+transmitter: Send Message - {Second: 13}
+transmitter: Broker_Publish() Return Code = 0
+
+transmitter: Send Message - {Second: 14}
+transmitter: Broker_Publish() Return Code = 0
+
+transmitter: Send Message - {Second: 15}
+transmitter: Broker_Publish() Return Code = 0"
+
+damonbarry commented on Feb 1, 2018:
+"@suniltop Your timer fires a signal every millisecond, meaning your handler will (try to) run A LOT. I wonder if your handler is effectively starving the broker, and causing it to drop messages? If I remove the timer stuff your transmitter and receiver will run happily for as long as I run the gateway. Same thing happens if I change the timer to signal 10 times per second--it's been running for an hour now with no problems."
+
+suniltop commented on Feb 2, 2018:
+"Hi damonbarry,
+
+You are right about my timer is run fast.
+But i have realised that if the signal is generated while the function is running, problem is occurring.
+At this point does no matter signal source. ie. uart so,
+
+If I remove the timer stuff your transmitter and receiver will run happily for as long as I run the gateway
+Yes, you are absolutely right
+
+Same thing happens if I change the timer to signal 10 times per second,
+No, you are wrong
+Because,
+I have made test a lot already different periods (10ms 100ms 1s 10s). There is no solution. :(
+If we chose a big period for timer, we are reduce the likelihood of overlap between these two processes only. For example, I set the timer to 1 second, it occured in 24 hours.
+
+now,
+In fact i am not sure that this situation is a problem or not.
+i have solved problem several days ago. I have create a thread for every signal
+
+Thanks for your effort
+
+Best Regards"
+
+damonbarry commented on Feb 2, 2018:
+"i have realised that if the signal is generated while the function is running, problem is occurring.
+
+I think I know what's going on...our broker uses nanomsg, and nanomsg uses sockets to communicate. At least on posix systems, socket reads can be interrupted by other signals that occur on the process. So in this case nn_recv returns -1, and errno==EINTR. When this happens we should simply call nn_recv again, but we don't. Instead we exit the listening thread.
+
+I did a quick patch of the gateway on my Linux box and I've been running your code for about 15 minutes now--it's still going. I'll do some more testing, then I'll see about getting this fix cleaned up and checked in."
+
+damonbarry added the bug label on Feb 2, 2018
+damonbarry added a commit to damonbarry/iot-edge-v1 that referenced this issue on Feb 6, 2018
+(Azure#474) Retry when nn_send/recv/close/shutdown is interrupted by … …
+fe3049c
+…a signal
+
+If calls to our underlying message broker (nanomsg) are interrupted due to a posix signal (on *nix platforms), we interpret that as an error condition and fail. But it's not an error condition, and can actually be quite common (in fact it's more or less guaranteed if a custom module makes use of posix signals, e.g., for events).
+
+This change adds handling logic after calls to nn_send(), nn_recv(), nn_close(), and nn_shutdown() to detect the interrupted condition (nn function returns -1, errno = EINTR) and retry the command as recommended by the nanomsg documentation.
+
+Note that I didn't bother detecting EINTR when NN_DONTWAIT is specified, because in that case the function will return errno = EAGAIN, which we're already handling.
+
+Note also there are some other nanomsg functions that can return EINTR, but I did an audit of our code and these four are the only ones we're using.
+
+damonbarry added a commit to damonbarry/iot-edge-v1 that referenced this issue on Feb 15, 2018
+@damonbarry
+(Azure#474) Retry when nn_send/recv/close/shutdown is interrupted by … …
+50b0526
+…a signal
+
+If calls to our underlying message broker (nanomsg) are interrupted due to a posix signal (on *nix platforms), we interpret that as an error condition and fail. But it's not an error condition, and can actually be quite common (in fact it's more or less guaranteed if a custom module makes use of posix signals, e.g., for events).
+
+This change adds handling logic after calls to nn_send(), nn_recv(), nn_close(), and nn_shutdown() to detect the interrupted condition (nn function returns -1, errno = EINTR) and retry the command as recommended by the nanomsg documentation.
+
+Note that I didn't bother detecting EINTR when NN_DONTWAIT is specified, because in that case the function will return errno = EAGAIN, which we're already handling.
+
+Note also there are some other nanomsg functions that can return EINTR, but I did an audit of our code and these four are the only ones we're using.
+
+damonbarry commented on Feb 15, 2018:
+"Merged into master (PR #507)."
+
+damonbarry added the fix checked in label on Feb 15, 2018
+damonbarry closed this as completed on Mar 24, 2018

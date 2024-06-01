@@ -1,0 +1,20 @@
+Title:Got errors during install 1.3.1 on macOS #742
+ArthurMa1978 commented on Feb 1, 2018:
+"Package version: 1.3.1
+
+ task install->install arduino failed: Error: Unexpected error when executing brew cask reinstall --force arduino : Command failed: brew cask reinstall --force arduino . Error: Command failed: brew cask reinstall --force arduino     at ChildProcess.exithandler (child_process.js:206:12)     at emitTwo (events.js:106:13)     at ChildProcess.emit (events.js:191:7)     at maybeClose (internal/child_process.js:877:16)     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+--
+
+ task install->install vscode failed: Error: Unexpected error when executing brew cask reinstall --force visual-studio-code : Command failed: brew cask reinstall --force visual-studio-code . Error: Command failed: brew cask reinstall --force visual-studio-code     at ChildProcess.exithandler (child_process.js:275:12)     at emitTwo (events.js:126:13)     at ChildProcess.emit (events.js:214:7)     at maybeClose (internal/child_process.js:925:16)     at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
+--
+
+ task install->install board package failed: Error: Unexpected error when executing "" --install-boards AZ3166:stm32f4:1.3.1 : Command failed: "" --install-boards AZ3166:stm32f4:1.3.1 /bin/sh: : command not found . Error: Command failed: "" --install-boards AZ3166:stm32f4:1.3.1 /bin/sh: : command not found     at ChildProcess.exithandler (child_process.js:272:12)     at ChildProcess.emit (events.js:160:13)     at maybeClose (internal/child_process.js:943:16)     at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
+--
+
+ Task install Azure CLI failed: Error: Unexpected error when executing "/usr/local/Cellar/azure-cli/2.0.25/bin/az" --version : Command failed: "/usr/local/Cellar/azure-cli/2.0.25/bin/az" --version /usr/local/Cellar/azure-cli/2.0.25/bin/az: line 6: python3: command not found . Error: Command failed: "/usr/local/Cellar/azure-cli/2.0.25/bin/az" --version /usr/local/Cellar/azure-cli/2.0.25/bin/az: line 6: python3: command not found     at ChildProcess.exithandler (child_process.js:272:12)     at ChildProcess.emit (events.js:160:13)     at maybeClose (internal/child_process.js:943:16)     at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)"
+
+ArthurMa1978 assigned Sneezry on Feb 1, 2018
+ArthurMa1978 added Bug Installation P2 labels on Feb 1, 2018
+ArthurMa1978 modified the milestones: Sprint 131, Sprint 130 on Feb 1, 2018
+ArthurMa1978 modified the milestones: Sprint 130, Sprint 131 on Feb 9, 2018
+ArthurMa1978 closed this as completed on Mar 7, 2018

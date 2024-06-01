@@ -1,0 +1,3 @@
+Makhshari, A. and Mesbah, A., 2021, May. IoT bugs and development challenges. In 2021 IEEE/ACM 43rd International Conference on Software Engineering (ICSE) (pp. 460-472). IEEE.
+
+https://ieeexplore.ieee.org/abstract/document/9402092

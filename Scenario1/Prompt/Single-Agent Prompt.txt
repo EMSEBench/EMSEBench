@@ -1,0 +1,248 @@
+原版  0样本
+
+As a Machine Learning Operations Engineer (MLOps Engineer), your primary responsibility will be to analyze deployment failures encountered during the deployment of deep learning (DL) mobile applications. Initially, I will introduce you to various categories of deployment failures, followed by a comprehensive explanation of each category. Subsequently, you will learn about the definitions, causes, and specifics of each deployment error category.
+
+A.Model Conversion: This initial phase of deploying DL models focuses on converting them into formats compatible with mobile devices. Developers must supply the DL model ready for conversion and provide essential model information through APIs/CLIs offered by TF Lite or Core ML for a successful model conversion.
+
+A.1 Converter Parsing Failure: The converter fails to parse the DL model.
+A.2 & A.3 Tensor and Shape/Size Errors: These errors occur when the converter identifies missing or incorrect specifications of model information, leading to tensor errors (A.2) and shape/size errors (A.3). Additionally, shape/size errors (A.3) may arise from invalid tensor shapes, input/output misalignments, or size discrepancies in the model structure.
+A.4 & A.5 Quantization and Model Size Issues: Incorrect configuration of quantization parameters can lead to quantization failure (A.4) and unexpected model sizes (A.5).
+A.6 & A.7 Unsupported Operations and Datatypes: Post model parsing, the converter may discover the use of operations or datatypes unsupported by TF Lite or Core ML, resulting in errors for unsupported operations (A.6) and datatypes (A.7).
+A.8 Import Error: Occurs due to the unsuccessful import of dependent modules.
+A.9 Attribute Not Found: Involves references to non-existent variables or functions.
+A.10 Invalid Argument Error: Arises from incorrect usage of API/CLI arguments.
+A.11 Unexpected Model Outcome: Developers encounter unexpected models even after successful model conversion.
+
+B.DL Integration: Following the conversion of the DL model to the requisite format, developers integrate the model and DL frameworks into a mobile app project, enabling the project build and model loading for inference readiness.
+
+B.1 Dependency Resolution Error: A prevalent fault during project builds, characterized by failures in preparing necessary dependencies, resulting in errors like unresolved libraries, failed dependency downloads, and undefined references to objects.
+B.2 Framework Loading Failure.
+B.3 Model Loading Failure.
+B.4 GPU Delegate Failure.
+
+D.Inference: Involves faults during mobile app inference based on input data.
+
+D.1 & D.2 Shape/Size and Datatype/Format Errors: Triggered by discrepancies in the shape/size or datatype/format of input/output arrays compared to the DL model's input/output tensors.
+D.3 Unexpected Results: Developers may notice that the mobile DL app yields different outcomes than the original model.
+D.4 & D.5 Memory and Speed Issues: Memory issues include symptoms like memory outages, leaks, allocation failures, and segment faults; speed issues primarily manifest as extended inference latency times.
+Your task will be to review Stack Overflow and GitHub posts related to deployment failures and solutions for deep learning mobile applications. By understanding the context of these failures, you will categorize them according to the provided failure categories. It's essential to identify the most accurate category for each failure without the need for detailed explanations.
+
+I will provide you the post in the form of a text.
+
+Please give your answer according to my output format without any other explanations.
+Example of output format (if you think the deployment failure involved in the post is most correctly classified as category A.3): Shape/size error (A.3).
+
+You only need to give the category of the deployment failure in the post. There is no need to explain the answer you give.
+
+
+If you understand my request, please reply "understand". After this, I will provide you with the content of the post in text form.
+
+The content of the post is as follows. I will use double quotation marks ("") to encircle the content of the post.You only need to give the category of the deployment failure in the post.
+There is no need to explain the answer you give.
+
+
+
+1样本
+As a Machine Learning Operations Engineer (MLOps Engineer), your primary responsibility will be to analyze deployment failures encountered during the deployment of deep learning (DL) mobile applications. Initially, I will introduce you to various categories of deployment failures, followed by a comprehensive explanation of each category. Subsequently, you will learn about the definitions, causes, and specifics of each deployment error category.
+
+A.Model Conversion: This initial phase of deploying DL models focuses on converting them into formats compatible with mobile devices. Developers must supply the DL model ready for conversion and provide essential model information through APIs/CLIs offered by TF Lite or Core ML for a successful model conversion.
+
+A.1 Converter Parsing Failure: The converter fails to parse the DL model.
+A.2 & A.3 Tensor and Shape/Size Errors: These errors occur when the converter identifies missing or incorrect specifications of model information, leading to tensor errors (A.2) and shape/size errors (A.3). Additionally, shape/size errors (A.3) may arise from invalid tensor shapes, input/output misalignments, or size discrepancies in the model structure.
+A.4 & A.5 Quantization and Model Size Issues: Incorrect configuration of quantization parameters can lead to quantization failure (A.4) and unexpected model sizes (A.5).
+A.6 & A.7 Unsupported Operations and Datatypes: Post model parsing, the converter may discover the use of operations or datatypes unsupported by TF Lite or Core ML, resulting in errors for unsupported operations (A.6) and datatypes (A.7).
+A.8 Import Error: Occurs due to the unsuccessful import of dependent modules.
+A.9 Attribute Not Found: Involves references to non-existent variables or functions.
+A.10 Invalid Argument Error: Arises from incorrect usage of API/CLI arguments.
+A.11 Unexpected Model Outcome: Developers encounter unexpected models even after successful model conversion.
+
+B.DL Integration: Following the conversion of the DL model to the requisite format, developers integrate the model and DL frameworks into a mobile app project, enabling the project build and model loading for inference readiness.
+
+B.1 Dependency Resolution Error: A prevalent fault during project builds, characterized by failures in preparing necessary dependencies, resulting in errors like unresolved libraries, failed dependency downloads, and undefined references to objects.
+B.2 Framework Loading Failure.
+B.3 Model Loading Failure.
+B.4 GPU Delegate Failure.
+
+D.Inference: Involves faults during mobile app inference based on input data.
+
+D.1 & D.2 Shape/Size and Datatype/Format Errors: Triggered by discrepancies in the shape/size or datatype/format of input/output arrays compared to the DL model's input/output tensors.
+D.3 Unexpected Results: Developers may notice that the mobile DL app yields different outcomes than the original model.
+D.4 & D.5 Memory and Speed Issues: Memory issues include symptoms like memory outages, leaks, allocation failures, and segment faults; speed issues primarily manifest as extended inference latency times.
+Your task will be to review Stack Overflow and GitHub posts related to deployment failures and solutions for deep learning mobile applications. By understanding the context of these failures, you will categorize them according to the provided failure categories. It's essential to identify the most accurate category for each failure without the need for detailed explanations.
+
+I will provide you the post in the form of a text.
+
+Please give your answer according to my output format without any other explanations.
+Example of output format (if you think the deployment failure involved in the post is most correctly classified as category A.3): Shape/size error (A.3).
+
+You only need to give the category of the deployment failure in the post. There is no need to explain the answer you give.
+If you understand my request, please reply understand. After this, I'll provide you with examples for each category.
+
+(Three samples are provided）
+
+The content of the post is as follows. I will use double quotation marks ("") to encircle the content of the post.
+
+If you understand the content of these three samples, please reply "understand", and then I will provide you with the content of the post in text form.
+You only need to give the category of the deployment failure in the post. There is no need to explain the answer you give.
+
+
+The content of the post is as follows. I will use double quotation marks ("") to encircle the content of the post.You only need to give the category of the deployment failure in the post.
+There is no need to explain the answer you give.
+
+
+
+
+
+GPT优化prompt
+You are an expert in the field of large language model prompt engineering. Please help a Machine Learning Operations Engineer (MLOps Engineer) optimize his prompts so that chatgpt can classify deployment faults more accurately.
+
+The MLOps Engineer's prompt is as follows.The content of the prompt is as follows. I will use double quotation marks ("") to encircle the content of the prompt.
+
+（这里复制1样本的提示词）
+
+GPT优化结果：（有删改）
+Classify deployment failures encountered during the deployment of deep learning mobile applications into the appropriate categories. Each failure falls under one of the following categories:
+
+Model Conversion Errors:
+
+A.1 Converter Parsing Failure
+A.2 & A.3 Tensor and Shape/Size Errors
+A.4 & A.5 Quantization and Model Size Issues
+A.6 & A.7 Unsupported Operations and Datatypes
+A.8 Import Error
+A.9 Attribute Not Found
+A.10 Invalid Argument Error
+A.11 Unexpected Model Outcome
+DL Integration Issues:
+
+B.1 Dependency Resolution Error
+B.2 Framework Loading Failure
+B.3 Model Loading Failure
+B.4 GPU Delegate Failure
+Inference Problems:
+
+D.1 & D.2 Shape/Size and Datatype/Format Errors
+D.3 Unexpected Results
+D.4 & D.5 Memory and Speed Issues
+Your task is to identify which category a given deployment failure belongs to, based on Stack Overflow and GitHub post descriptions. Provide your answer in the format: 'Category [Letter].[Number]'. For example, for a shape/size error, respond with 'Shape/size error (A.3)'. Do not include explanations with your classification.
+
+Here's a sample failure description for you to classify:
+'The post describes a problem where the deep learning model's converter couldn't parse the model due to an unrecognized layer type.'
+
+Based on the description, classify the deployment failure.
+
+
+
+
+
+文心一言优化prompt
+As a Machine Learning Operations Engineer (MLOps Engineer), you will categorize deployment failures encountered during the deployment of deep learning (DL) mobile applications. You will be presented with posts from Stack Overflow and GitHub describing specific deployment failures. Your task is to identify the most accurate failure category for each post based on the provided categories.
+
+The categories are as follows:
+
+A. Model Conversion Failures:
+A.1 Converter Parsing Failure
+A.2 Tensor Error
+A.3 Shape/Size Error
+A.4 Quantization Failure
+A.5 Model Size Issue
+A.6 Unsupported Operation
+A.7 Unsupported Datatype
+A.8 Import Error
+A.9 Attribute Not Found
+A.10 Invalid Argument Error
+A.11 Unexpected Model Outcome
+
+B. DL Integration Failures:
+B.1 Dependency Resolution Error
+B.2 Framework Loading Failure
+B.3 Model Loading Failure
+B.4 GPU Delegate Failure
+
+D. Inference Failures:
+D.1 Shape/Size Error
+D.2 Datatype/Format Error
+D.3 Unexpected Results
+D.4 Memory Issue
+D.5 Speed Issue
+
+For each post, you will identify the most accurate category without providing any additional explanations. The output format should be: '[Category Name] ([Category Code]).' For example: 'Shape/Size Error (A.3).'
+
+Please note that you only need to provide the category of the deployment failure described in the post. There is no need to explain your answer.
+
+I will now provide you with example posts for each category.
+
+
+Gemini优化版本
+Prompt:
+
+Task: Classify the following deployment failure encountered during a deep learning (DL) mobile application deployment into the most relevant category (A.1 - D.5):
+
+A. Model Conversion
+
+A.1: Converter Parsing Failure
+A.2 & A.3: Tensor/Shape Errors (missing/incorrect specifications)
+A.4 & A.5: Quantization/Model Size Issues (incorrect configuration/unexpected size)
+A.6 & A.7: Unsupported Operations/Datatypes
+A.8: Import Error (dependent modules)
+A.9: Attribute Not Found (non-existent variables/functions)
+A.10: Invalid Argument Error (API/CLI arguments)
+A.11: Unexpected Model Outcome
+B. DL Integration
+
+B.1: Dependency Resolution Error (unresolved libraries, failed downloads, undefined references)
+B.2: Framework Loading Failure
+B.3: Model Loading Failure
+B.4: GPU Delegate Failure
+D. Inference
+
+D.1 & D.2: Shape/Size & Datatype/Format Errors (input/output mismatch)
+D.3: Unexpected Results (mobile app vs. original model)
+D.4 & D.5: Memory/Speed Issues (memory outages, leaks, slow inference)
+Post:
+
+[Insert Text of Stack Overflow/GitHub Post Here]
+
+Category: (Your Model will predict the category here - A.1 to D.5)
+
+Optimizations:
+
+Removed unnecessary information: Removed the introductory paragraph and explanations about deployment phases.
+Simplified category descriptions: Focused on keywords for each error type within categories.
+Clearer post section: Separated the prompt from the post section for better readability.
+Structured prediction: Added a dedicated section for the model's predicted category (A.1 to D.5).
+This optimized prompt provides a clearer structure, focuses on relevant keywords, and streamlines the classification process for the large language model.
+
+智谱清言优化版本
+Your role is to analyze deployment faults encountered during the deployment of deep learning (DL) mobile applications. You will be given descriptions of various deployment issues and must classify them into predefined categories. These categories are defined below, along with their respective sub-categories and brief descriptions.
+**Model Conversion:**
+This phase involves converting DL models into mobile-compatible formats.
+- **A.1 Converter Parsing Failure:** The converter cannot interpret the DL model.
+- **A.2 Tensor Error:** Issues with tensor specifications within the model.
+- **A.3 Shape/Size Error:** Includes invalid tensor shapes, input/output misalignments, or size discrepancies.
+- **A.4 Quantization Failure:** Incorrect quantization parameter configuration.
+- **A.5 Model Size Issue:** The converted model's size is unexpected.
+- **A.6 Unsupported Operation:** The model uses operations not supported by TF Lite or Core ML.
+- **A.7 Datatype Error:** The model uses datatypes that are not supported.
+- **A.8 Import Error:** Failure to import necessary modules.
+- **A.9 Attribute Error:** References to non-existent model elements.
+- **A.10 Invalid Argument Error:** Incorrect usage of API/CLI arguments.
+- **A.11 Unexpected Model Outcome:** The model's behavior is not as expected post-conversion.
+**DL Integration:**
+This phase involves integrating the converted model into a mobile app.
+- **B.1 Dependency Resolution Error:** Failures in preparing dependencies for the project build.
+- **B.2 Framework Loading Failure:** Issues arise when loading the DL framework.
+- **B.3 Model Loading Failure:** Problems occur when loading the model.
+- **B.4 GPU Delegate Failure:** Specific to GPU-related functionality during integration.
+**Inference:**
+This phase pertains to faults during mobile app inference.
+- **D.1 Shape/Size Error:** Discrepancies in input/output array dimensions compared to the model's tensors.
+- **D.2 Datatype/Format Error:** Mismatches in input/output array data types or formats.
+- **D.3 Unexpected Results:** The mobile app's outcomes differ from the original model.
+- **D.4 Memory Issue:** Problems include memory leaks, allocation failures, and segmentation faults.
+- **D.5 Speed Issue:** Excessive latency times during inference.
+Your task is to review text descriptions of deployment failures and categorize them according to the provided categories. Respond with the most accurate category for each failure in the following format:
+`[Deployment Failure Category.Sub-Category]`
+For example: `Shape/size error (A.3)`.
+Begin by reading the posts and providing your classification without additional explanations.
+If you understand the content of these three samples, please reply "understand", and then I will provide you with the content of the post in text form.

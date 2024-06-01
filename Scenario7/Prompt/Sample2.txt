@@ -1,0 +1,5 @@
+Title:Memory Leaking
+
+Body:Hey; every image that I classify it; the more memory consumes it.Is there any way to reduce it like deleting cache or something? It's really weird.
+
+Comment:['You must mean on server?See this item:  https://github.com/infinitered/nsfwjs/issues/49====='; 'Yup! #49 is definitely the fix for this. I was having the same issue.Whatever object you send to ".classify()"; just run ".dispose()" after.=====']

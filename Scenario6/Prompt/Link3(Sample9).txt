@@ -1,0 +1,146 @@
+Title1:fail to parse config text with white space #3367
+
+nzomkxia commented on Jan 28, 2019:
+" I have searched the issues of this repository and believe that this is not a duplicate.
+ I have checked the FAQ of this repository and believe that this is not a duplicate.
+Environment
+Dubbo version: 2.7.0
+Operating System version: Mac OS
+Java version: JDK1.8
+Steps to reproduce this issue
+create dubbo.properties with trailing white space
+dubbo.provider.timeout=6666    
+start dubbo provider
+will cause an exception:
+java.lang.NumberFormatException: For input string: "6666   "
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.valueOf(Integer.java:766)
+	at org.apache.dubbo.common.utils.ClassHelper.convertPrimitive(ClassHelper.java:277)
+	at org.apache.dubbo.config.AbstractConfig.refresh(AbstractConfig.java:568)
+	at java.util.concurrent.ConcurrentHashMap$ValuesView.forEach(ConcurrentHashMap.java:4707)
+	at org.apache.dubbo.config.context.ConfigManager.refreshAll(ConfigManager.java:308)
+	at org.apache.dubbo.config.AbstractInterfaceConfig.startConfigCenter(AbstractInterfaceConfig.java:241)
+	at org.apache.dubbo.config.ServiceConfig.checkAndUpdateSubConfigs(ServiceConfig.java:267)
+	at org.apache.dubbo.config.ServiceConfig.export(ServiceConfig.java:328)
+	at org.apache.dubbo.config.spring.ServiceBean.onApplicationEvent(ServiceBean.java:104)
+	at org.apache.dubbo.config.spring.ServiceBean.onApplicationEvent(ServiceBean.java:55)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:400)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:354)
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:886)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.finishRefresh(ServletWebServerApplicationContext.java:161)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:551)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:140)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:386)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1242)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1230)
+	at org.apache.dubbo.demo.DubboProviderApplication.main(DubboProviderApplication.java:13)
+Pls. provide [GitHub address] to reproduce this issue.
+
+Expected Result
+What do you expected from the above steps？
+
+Actual Result
+What actually happens?
+
+If there is an exception, please attach the exception trace:
+
+Just put your stack trace here!"
+
+CrazyHZM commented on Jan 28, 2019:
+"Deleting the space will succeed. I don't recommend enhancing the handling of the space here. What do you think?"
+
+biyuhao commented on Jan 28, 2019:
+"There is a similar discussion in Springboot project
+spring-projects/spring-boot#13602 (comment)"
+
+chickenlj added this to the 2.7.1 milestone on Jan 30, 2019
+chickenlj added the type/enhancement label on Jan 30, 2019
+
+chickenlj commented on Jan 30, 2019:
+"White space should definitely be considered."
+
+chickenlj added a commit to chickenlj/incubator-dubbo that referenced this issue on Feb 18, 2019Fixes apache#3367, fail to parse config text with white space
+chickenlj added a commit to chickenlj/incubator-dubbo that referenced this issue on Feb 18, 2019
+Fixes apache#3367, fail to parse config text with white space
+
+This was referenced on Mar 4, 2019
+[Dubbo-3236] terminate when tomcat server fails to start. #3589
+[Dubbo-3367], fail to parse config text with white space #3590
+tswstarplanet closed this as completed in 8f7b0c3 on Mar 5, 2019
+Jeff-Lv pushed a commit that referenced this issue on Mar 26, 2019
+Merge master branch to 3.x dev branch (#3718)
+
+Title2:[Dubbo-3236] terminate when tomcat server fails to start. #3589
+
+chickenlj commented on Mar 4, 2019:
+"What is the purpose of the change
+Fixes #3236, terminate when tomcat server fails to start.
+
+Brief changelog
+Set system property before start tomcat server.
+
+Verifying this change
+Follow this checklist to help us incorporate your contribution quickly and easily:
+
+ Make sure there is a GITHUB_issue field for the change (usually before you start working on it). Trivial changes like typos do not require a GITHUB issue. Your pull request should address just this issue, without pulling in other changes - one PR resolves one issue.
+ Format the pull request title like [Dubbo-XXX] Fix UnknownException when host config not exist #XXX. Each commit in the pull request should have a meaningful subject line and body.
+ Write a pull request description that is detailed enough to understand what the pull request does, how, and why.
+ Write necessary unit-test to verify your logic correction, more mock a little better when cross module dependency exist. If the new feature or significant change is committed, please remember to add integration-test in test module.
+ Run mvn clean install -DskipTests=false & mvn clean test-compile failsafe:integration-test to make sure unit-test and integration-test pass.
+ If this contribution is large, please follow the Software Donation Guide."
+
+Fixes apache#3367, fail to parse config text with white space
+chickenlj changed the title [Dubbo-3367] terminate when tomcat server fails to start. [Dubbo-3236] terminate when tomcat server fails to start. on Mar 4, 2019
+
+codecov-io commented on Mar 4, 2019:
+"Codecov Report
+Merging #3589 into master will decrease coverage by 0.08%.
+The diff coverage is 100%.
+
+Impacted file tree graph
+
+@@             Coverage Diff              @@
+##             master    #3589      +/-   ##
+============================================
+- Coverage      64.2%   64.12%   -0.09%     
+  Complexity       71       71              
+============================================
+  Files           664      664              
+  Lines         28635    28636       +1     
+  Branches       4768     4768              
+============================================
+- Hits          18386    18363      -23     
+- Misses         8027     8049      +22     
+- Partials       2222     2224       +2
+Impacted Files	Coverage Δ	Complexity Δ	
+...e/dubbo/remoting/http/tomcat/TomcatHttpServer.java	87.87% <100%> (+0.37%)	0 <0> (ø)	⬇️
+...che/dubbo/remoting/transport/mina/MinaChannel.java	43.42% <0%> (-10.53%)	0% <0%> (ø)	
+...ng/exchange/support/header/HeartbeatTimerTask.java	73.68% <0%> (-5.27%)	0% <0%> (ø)	
+.../apache/dubbo/remoting/transport/AbstractPeer.java	58.69% <0%> (-4.35%)	0% <0%> (ø)	
+...dubbo/rpc/protocol/dubbo/CallbackServiceCodec.java	76.47% <0%> (-2.21%)	0% <0%> (ø)	
+...dubbo/remoting/exchange/support/DefaultFuture.java	70.94% <0%> (-2.03%)	0% <0%> (ø)	
+...he/dubbo/registry/multicast/MulticastRegistry.java	67.87% <0%> (-1.81%)	0% <0%> (ø)	
+...apache/dubbo/rpc/protocol/dubbo/DubboProtocol.java	65.53% <0%> (-1.14%)	0% <0%> (ø)	
+Continue to review full report at Codecov.
+
+Legend - Click here to learn more
+Δ = absolute <relative> (impact), ø = not affected, ? = missing data
+Powered by Codecov. Last update 8c934c9...52eda2f. Read the comment docs."
+
+tswstarplanet commented on Mar 5, 2019:
+"LGTM. I have tested it."
+
+tswstarplanet merged commit 8f7b0c3 into apache:master on Mar 5, 2019
+dubbo-bot mentioned this pull request on Mar 8, 2019
+[WeeklyReport] Weekly report for Dubbo 2019-3-1 to 2019-3-8 #3621
+
+beiwei30 added this to the 2.7.1 milestone on Mar 14, 2019
+Jeff-Lv pushed a commit that referenced this pull request on Mar 26, 2019
+Merge master branch to 3.x dev branch (#3718)
+chickenlj deleted the tomcat-exit-on-failure-#3236 branch 4 years ago

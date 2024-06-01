@@ -1,0 +1,61 @@
+Title:java.lang.IllegalArgumentException: Internal error: Failed to run on the given Interpreter: TfLiteGpuDelegate Invoke: Delegate should run on the same thread where it was initialized.Node number 175 (TfLiteGpuDelegate) failed to invoke
+
+mgarbade commented on Sep 8, 2019:
+In the android image classifier demo, I tried to run the Interpreter with GPU from start so I changed this line:
+
+  protected Classifier(Activity activity, Device device, int numThreads) throws IOException {
+    tfliteModel = loadModelFile(activity);
+    switch (device) {
+      case NNAPI:
+        tfliteOptions.setUseNNAPI(true);
+        break;
+      case GPU:
+        gpuDelegate = new GpuDelegate();
+        tfliteOptions.addDelegate(gpuDelegate);
+        break;
+      case CPU:
+        break;
+    }
+
+    tfliteOptions.setNumThreads(numThreads);
+    tflite = new Interpreter(tfliteModel, tfliteOptions);
+to this:
+
+  protected Classifier(Activity activity, Device device, int numThreads) throws IOException {
+    tfliteModel = loadModelFile(activity);
+    gpuDelegate = new GpuDelegate();
+    tfliteOptions.addDelegate(gpuDelegate);
+    tfliteOptions.setNumThreads(numThreads);
+    tflite = new Interpreter(tfliteModel, tfliteOptions);
+sounds simple, but it crashes with the above mentioned error.
+Weirdly: When I start the app in CPU mode and switch to GPU while running (via the options-sheet) it does work.
+
+Is the GpuDelegate class using some custom thread?
+
+ravikyram self-assigned this on Sep 9, 2019
+ravikyram added comp:lite type:support labels on Sep 9, 2019
+ravikyram assigned jdduke and unassigned ravikyram on Sep 9, 2019
+ravikyram added the stat:awaiting tensorflower label on Sep 9, 2019
+
+jdduke commented on Sep 11, 2019:
+In the sample, the Interpreter is run on a separate thread. When using the GPU, you must create/apply the delegate on the same thread as the one you use to run inference.
+
+jdduke closed this as completed on Sep 11, 2019
+
+tensorflow-bot bot commented on Sep 11, 2019:
+Are you satisfied with the resolution of your issue?
+Yes
+No
+
+mgarbade commented on Oct 15, 2019:
+This is not fixing it. I did not change the thread or anything. I just removed the switch-case, so the threads should be the same as before. Anyone else dealing with the same problem?
+
+mgarbade commented on Oct 15, 2019:
+Also strange: If I add a SystemClock.sleep(500); after the call for initializing tflite and before running inference, it doesn't crash anymore. This hints to the fact, that the "thread" is not the problem at all.
+
+Rather it seems that the system is not yet ready for running the classifier, although the "classifier != null" check passes successfully.
+
+Is there a way to tell, when exactly the initialization of the tflite classifer with gpu delegate has completed?
+
+jdduke commented on Oct 16, 2019:
+Ah, I think this may just be a function of the fact that the very first time we create the Interpreter, it happens to be on the UI thread, and in all such cases we default to CPU execution, not GPU. Subsequent requests to enable GPU are done on the inference thread. We should fix this in the examples.

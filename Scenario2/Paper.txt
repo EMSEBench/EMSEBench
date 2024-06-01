@@ -1,0 +1,3 @@
+Li, Z., Li, H., Chen, T.H.P. and Shang, W., 2021. Deeplv: Suggesting log levels using ordinal based neural networks. In 2021 IEEE/ACM 43rd International Conference on Software Engineering (ICSE).
+
+https://ieeexplore.ieee.org/abstract/document/9402068

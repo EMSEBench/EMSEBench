@@ -1,0 +1,112 @@
+Title:TensorFlowLite cannot locate symbol "__atomic_store_8" crash on Android x86 devices
+
+koAlech commented on Jan 31, 2018:
+System information
+·OS Platform and Distribution : Android x86 v5.0+
+·TensorFlow installed from : built using gradle from maven repository: https://google.bintray.com/tensorflow
+·TensorFlow version : 1.2.0-rc0
+Describe the problem
+We migrated our app to use tensorflow lite but it crashes on x86 upon invoking the inference module. It works perfect on ARM v7a devices.
+
+Source code / logs
+Here's the exception:
+
+01-15 03:39:47.138  2020  2056 W System.err: TensorFlowLite: failed to load native library: dlopen failed: cannot locate symbol "__atomic_store_8" referenced by "/data/app/com.XXXXXXX.XXXXXXXXXXXXXXXX-1/lib/x86/libtensorflowlite_jni.so"...
+01-15 03:39:47.138  2020  2056 E art     : No implementation found for long org.tensorflow.lite.NativeInterpreterWrapper.createErrorReporter(int) (tried Java_org_tensorflow_lite_NativeInterpreterWrapper_createErrorReporter and Java_org_tensorflow_lite_NativeInterpreterWrapper_createErrorReporter__I)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: FATAL EXCEPTION: XXXXXServiceThread
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: Process: com.XXXXXXX.XXXXXXXXXXXXXXXX, PID: 2020
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: java.lang.UnsatisfiedLinkError: No implementation found for long org.tensorflow.lite.NativeInterpreterWrapper.createErrorReporter(int) (tried Java_org_tensorflow_lite_NativeInterpreterWrapper_createErrorReporter and Java_org_tensorflow_lite_NativeInterpreterWrapper_createErrorReporter__I)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at org.tensorflow.lite.NativeInterpreterWrapper.createErrorReporter(Native Method)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at org.tensorflow.lite.NativeInterpreterWrapper.<init>(NativeInterpreterWrapper.java:47)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at org.tensorflow.lite.Interpreter.<init>(Interpreter.java:77)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at com.XXXXXXX.XXXXXXXXXXXXXXXX.utils.classifier.TensorflowLiteClassifier.<init>(TensorflowLiteClassifier.java:46)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at com.XXXXXXX.XXXXXXXXXXXXXXXX.service.classifier.TensorFlowFileClassifier.initialize(TensorFlowFileClassifier.java:41)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at com.XXXXXXX.XXXXXXXXXXXXXXXX.service.servicethread.ServiceThreadModel.onFileSystemScanStarted(ServiceThreadModel.java:92)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at com.XXXXXXX.XXXXXXXXXXXXXXXX.service.servicethread.ServiceThread$1.handleMessage(ServiceThread.java:82)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:102)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:154)
+01-15 03:39:47.183  2020  2056 E AndroidRuntime: 	at android.os.HandlerThread.run(HandlerThread.java:61)
+01-15 03:39:47.1
+
+reedwm commented on Jan 31, 2018:
+/CC @petewarden
+
+reedwm added the stat:awaiting tensorflower label on Jan 31, 2018
+andrehentz added the comp:lite label on Jan 31, 2018
+
+tensorflowbutler commented on Feb 16, 2018:
+Nagging Awaiting TensorFlower: It has been 14 days with no activity and the awaiting tensorflower label was assigned. Please update the label and/or status accordingly.
+
+gabrielrlp commented on Mar 2, 2018:
++1
+
+petewarden commented on Mar 3, 2018:
+Sorry for the delay on this one! From a bit of digging, it looks like it may be related to this issue:
+alexa/avs-device-sdk#380
+
+In that case, it was resolved with an explicit addition of -latomic to the linker stage. Can you try editing build_def.bzl to add that flag:
+https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/lite/build_def.bzl#L48
+In def tflite_linkopts_unstripped(), add -Wl,-latomic to the linker flags section.
+
+tensorflowbutler removed the stat:awaiting tensorflower label on Mar 3, 2018:
+
+alfred11235 commented on Mar 19, 2018
+I have exactly the same issue, I added the dependency to the file build_def.bzl and the problem is still there. Once the line is added there is another thing that has to be done ?
+
+tensorflowbutler assigned angerson on Apr 3, 2018
+angerson assigned petewarden and unassigned petewarden and angerson on Apr 4, 2018
+
+angerson commented on Apr 4, 2018:
+@koAlech did @petewarden's suggestion fix your problem?
+
+angerson added the stat:awaiting response label on Apr 4, 2018
+
+tensorflowbutler commented on Apr 18, 2018:
+It has been 14 days with no activity and the awaiting response label was assigned. Is this still an issue?
+
+koAlech commented on Apr 20, 2018:
+I apologize for the slow response. We have failed in following @petewarden's suggestion as we are unsure how to build the aar file for tensorflow lite (as opposed to tensorflow mobile which we migrated from).
+
+We have followed the tfilte guide and are using the latest build from the bintray repository (currently v0.1.1).
+
+Please advise how we should implement @petewarden's suggestion in this configuration.
+
+koAlech commented on Apr 20, 2018:
+Update: tried the latest version (0.1.8-rc0) and it crashes with the same exception on x86 devices.
+
+tensorflowbutler removed the stat:awaiting response label on Apr 21, 2018
+
+andrehentz commented on Apr 25, 2018:
+You can build tf lite's aar with:
+bazel build -c opt --cxxopt=--std=c++11
+--fat_apk_cpu=x86,x86_64,arm64-v8a,armeabi-v7a
+//tensorflow/contrib/lite/java:tensorflow-lite
+
+koAlech commented on May 3, 2018:
+Tried @andrehentz solution but it failed to build an aar file. One tensorflowlibrary.jar file was built in the bazel-bin/tensorflow folder. Please advise
+
+tensorflowbutler commented on May 27, 2018:
+Nagging Assignee @petewarden: It has been 23 days with no activity and this issue has an assignee. Please update the label and/or status accordingly.
+
+tensorflowbutler commented on Jun 11, 2018:
+Nagging Assignee @petewarden: It has been 37 days with no activity and this issue has an assignee. Please update the label and/or status accordingly.
+
+tensorflowbutler commented on Jun 26, 2018:
+Nagging Assignee @petewarden: It has been 52 days with no activity and this issue has an assignee. Please update the label and/or status accordingly.
+
+tensorflowbutler commented on Jul 11, 2018:
+Nagging Assignee @petewarden: It has been 67 days with no activity and this issue has an assignee. Please update the label and/or status accordingly.
+
+anitha-v assigned rockyrhodes and unassigned petewarden on Jul 20, 2018
+
+suharshs commented on Aug 3, 2018:
+What is the exact command you ran (i.e. full bazel command)? What version of the sdk did you run it on? Were there any errors produced?
+
+koAlech commented on Aug 7, 2018:
+@suharshs I was about to paste the entire bazel command we used in order to build tflite from source but then realized that a new version (1.9.0) was released and decided to give it a try.
+And surprisingly this issue was resolved! We're so happy!
+
+koAlech closed this as completed on Aug 7, 2018
+
+suharshs commented on Aug 8, 2018:
+Fantastic! :)

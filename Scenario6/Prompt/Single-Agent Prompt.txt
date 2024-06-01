@@ -1,0 +1,118 @@
+0样本
+Commit messages play an important role in communication among developers. To measure the quality of commit messages, researchers have defined what semantically constitutes a Good commit message: it should have both "the summary of the code change" (What) and "the motivation/reason behind it" (Why).
+
+Suppose you are a software development engineer and now you need to read the commit message I provided and determine whether it contains Why and What. The label of result is introduced as follows:
+label = 0 means a commit message contains "Why and What".
+label = 1 means a commit message contains "Neither Why nor What"
+label = 2 means a commit message contains "No What".
+label = 3 means a commit message contains "No Why".
+
+When you label '1' or '3' means you think this commit message dosen't contains "Why",there are two situations here:
+1.If <pr_link> or <issue_link> is mentioned in the commit message,you should ask me for the link content,then I will send you the link content of this commit message.You are supposed to read the link content and determine whether it contains Why, if it contains, we think this commit message contains "Why" and you should relabel it.
+2.If <pr_link> or <issue_link> isn't mentioned in the commit message,you should tell me that "No pr_link" and let me send you next commit message.
+
+When you label '0' or '2', you don't need to read the link content.
+
+
+If you understand my prompt words, reply Understand. I will then send you commit message.
+
+The content of message/link is as follows.
+
+
+1样本
+Commit messages play an important role in communication among developers. To measure the quality of commit messages, researchers have defined what semantically constitutes a Good commit message: it should have both "the summary of the code change" (What) and "the motivation/reason behind it" (Why).
+
+Suppose you are a software development engineer and now you need to read the commit message I provided and determine whether it contains Why and What. The label of result is introduced as follows:
+label = 0 means a commit message contains "Why and What".(e.g.,Remove unnecessary dependencies)
+label = 1 means a commit message contains "Neither Why nor What".(e.g.,Formatting)
+label = 2 means a commit message contains "No What".(e.g.,fix NPE when no listeners registered for key)
+label = 3 means a commit message contains "No Why".(e.g.,generate urls directly for non-dubbo service instances.)
+
+When you label '1' or '3' means you think this commit message dosen't contains "Why",there are two situations here:
+1.If <pr_link> or <issue_link> is mentioned in the commit message,you should ask me for the link content,then I will send you the link content of this commit message.You are supposed to read the link content and determine whether it contains Why, if it contains, we think this commit message contains "Why" and you should relabel it.
+2.If <pr_link> or <issue_link> isn't mentioned in the commit message,you should tell me that "No pr_link" and let me send you next commit message.
+
+When you label '0' or '2', you don't need to read the link content.
+
+
+If you understand my prompt words, reply Understand. I will then send you commit message.
+
+The content of message/link is as follows.
+
+优化过程
+Suppose you are an expert in the field of large language model (LLM) prompt engineering. Now you are required to help a software development engineer optimize his prompt words so that the large language model can better understand his needs.
+
+His prompt words are as follows.The content of the prompt word is enclosed in brackets:
+
+ChatGPT优化1样本（去掉了样本，自行补充）
+Task: Evaluate Commit Messages for Semantic Quality
+
+Objective: Assess the completeness of commit messages based on their inclusion of specific elements. These elements define the semantic quality of a good commit message:
+What: A summary of the code changes made.
+Why: The motivation or reason behind the code changes.
+
+Labels Explained:
+Label 0: The commit message contains both "What" and "Why".(e.g.,Remove unnecessary dependencies)
+Label 1: The commit message contains neither "What" nor "Why".(e.g.,Formatting)
+Label 2: The commit message is missing the "What" element.(e.g.,fix NPE when no listeners registered for key)
+Label 3: The commit message is missing the "Why" element.(e.g.,generate urls directly for non-dubbo service instances.)
+
+Additional Instructions for Labeling:
+If you label a commit message as '1' or '3', and the message includes placeholders like <pr_link> or <issue_link>, request the content of these links. Upon reviewing the link content, if it includes the missing "Why", update the label accordingly.
+If there is no <pr_link> or <issue_link> mentioned in the commit message, inform that no link is available and request the next commit message.
+Labels '0' and '2' do not require reviewing additional link content.
+
+Procedure:
+Read the provided commit message.
+Determine if it includes the necessary "What" and "Why" components based on the criteria above.
+Label the message accordingly.
+If applicable, request and review link content to refine your labeling.
+Start: If you understand these instructions, reply "Understand", and the first commit message will be provided for evaluation.
+
+
+文心一言优化1样本
+Commit messages are crucial for developer communication. A good commit message should include both the summary of the code change ("What") and the motivation/reason behind it ("Why").
+
+As a software development engineer, your task is to classify the commit message I will provide based on the following criteria:
+label = 0: Commit message contains both "Why" and "What". (e.g., "Remove unnecessary dependencies" contains both.)
+label = 1: Commit message contains neither "Why" nor "What". (e.g., "Formatting".)
+label = 2: Commit message is missing "What". (e.g., "fix NPE when no listeners registered for key" is missing "What".)
+label = 3: Commit message is missing "Why". (e.g., "generate urls directly for non-dubbo service instances" is missing "Why".)
+
+If you label as '1' or '3', indicating the commit message doesn't contain "Why", please check for the presence of <pr_link> or <issue_link>:
+If a link is present, ask me for the link content. After reading the link, relabel if it contains the missing "Why".
+If no link is present, inform me with "No pr_link" for the next commit message.
+
+If you label as '0' or '2', no need to check the link content.
+
+Ready for the commit message? Reply with "Ready".
+
+Gemini优化1样本（去掉understand）（有删改）
+Task: Analyze the commit message and determine if it describes both the "What" (summary of the code change) and "Why" (motivation/reason behind it).
+
+Label the commit message with one of the following categories:
+0 (Good): Contains both "What" and "Why". (e.g., "Remove unnecessary dependencies to improve performance")
+1 (Bad): Contains neither "What" nor "Why". (e.g., "Formatting")
+2 (Incomplete What): Describes "Why" but lacks a clear description of "What" changed. (e.g., "Fix NPE when no listeners registered for key")
+3 (Incomplete Why): Describes "What" changed but lacks a clear explanation of "Why" it was done. (e.g., "Generate URLs directly for non-dubbo service instances")
+
+Additional Information:
+If the commit message mentions a Pull Request (PR) link or Issue link (denoted by <pr_link> or <issue_link>), the LLM can access the linked content to potentially find the missing information ("Why" or "What"). In such cases, the LLM will request the linked content for further analysis.
+
+If you understand my prompt words, reply Understand. I will then send you commit message.
+
+
+智谱清言优化1样本（去掉understand）（去掉了样本，自行补充）
+As an expert in commit message analysis, I'm here to help you evaluate the quality of your commit messages based on the presence of two key elements: "What" (a summary of the code change) and "Why" (the motivation/reason behind the change). 
+Please provide me with a commit message, and I will assign it one of the following labels:
+- **label = 0**: The commit message contains both "Why" and "What".(e.g.,Remove unnecessary dependencies)
+- **label = 1**: The commit message contains neither "Why" nor "What".(e.g.,Formatting)
+- **label = 2**: The commit message contains "Why" but lacks "What".(e.g.,fix NPE when no listeners registered for key)
+- **label = 3**: The commit message contains "What" but lacks "Why".(e.g.,generate urls directly for non-dubbo service instances.)
+If I assign a label of '1' or '3', it means the commit message appears to lack "Why". However, there are two scenarios to consider:
+1. If the commit message mentions '<pr_link>' or '<issue_link>', please provide the content of the link. I will then review the content to determine if it includes the "Why". If it does, I will adjust the label accordingly.
+2. If there is no '<pr_link>' or '<issue_link>' in the commit message, please proceed to send the next commit message.
+In cases where I assign a label of '0' or '2', there is no need to provide link contents, and you can directly send the next commit message for evaluation.
+
+If you understand my prompt words, reply Understand. I will then send you commit message.
+

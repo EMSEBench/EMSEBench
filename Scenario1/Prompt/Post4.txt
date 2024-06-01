@@ -1,0 +1,19 @@
+Title:Why the spec.neuralNetwork get nothing?
+wellido commented on Oct 16, 2018:
+I use coremltools 2.0, and follow the exmple file in here to do image preprocessing, but after loaded the mlmodel, the method spec.neuralNetwork get nothing. What mistakes may I make?
+
+aseemw commented on Oct 17, 2018:
+In the example the model is of type "neuralNetwork". But maybe while converting you are also providing "class_labels" argument which makes the network a "classifier". So you should try spec.neuralNetworkClassifier. You can actually try calling spec.WhichOneof('Type') to find the type of the spec, as done here
+
+wellido commented on Oct 17, 2018:
+In the example the model is of type "neuralNetwork". But maybe while converting you are also providing "class_labels" argument which makes the network a "classifier". So you should try spec.neuralNetworkClassifier. You can actually try calling spec.WhichOneof('Type') to find the type of the spec, as done here
+Thanks for your reply! I solved my problem. By the way, does coremltools now support keras lamdba layer conversion?
+
+aseemw commented on Oct 17, 2018:
+CoreML supports custom layers since iOS 11.3.
+So Keras lambda layers can be converted into CoreML custom layers at conversion time. Of course, you would have to provide the implementation of the layer in your app.
+For a demo, see: https://developer.apple.com/videos/play/wwdc2018/709/
+
+aseemw closed this as completed on Oct 17, 2018
+
+Birch-san pushed a commit to Birch-san/coremltools that referenced this issue on Nov 27, 2022
