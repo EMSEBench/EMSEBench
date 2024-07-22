@@ -120,3 +120,19 @@ Our experimental data and logs have been collected in our dataset. For specific 
 
 
 
+### Citation
+```
+@inproceedings{liang2024emsebench,
+author = {Liang, Wenjun and Xiao, Guanping},
+title = {An Exploratory Evaluation of Large Language Models Using Empirical Software Engineering Tasks},
+year = {2024},
+isbn = {9798400707056},
+publisher = {ACM},
+address = {New York, NY, USA},
+booktitle = {Proceedings of the 15th Asia-Pacific Symposium on Internetware},
+pages = {31–40},
+numpages = {10},
+location = {Macau, Macao},
+series = {Internetware '24}
+}
+```
